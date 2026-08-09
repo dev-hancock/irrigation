@@ -40,12 +40,6 @@ namespace Irrigation
 
 			Serial.println("System begin...");
 
-			result = _valves.begin();
-			if (result.isFailure())
-			{
-				return result;
-			}
-
 			result = _wifi.begin();
 			if (result.isFailure())
 			{
@@ -53,6 +47,12 @@ namespace Irrigation
 			}
 
 			result = _mqtt.begin();
+			if (result.isFailure())
+			{
+				return result;
+			}
+
+			result = _valves.begin();
 			if (result.isFailure())
 			{
 				return result;
