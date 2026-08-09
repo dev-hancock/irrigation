@@ -4,22 +4,20 @@
 #include <ArduinoJson.h>
 #include <vector>
 
-#include "Common/Messaging.h"
 #include "Common/Api.h"
 
 #include "Valves/Types.h"
 #include "Valves/State.h"
 #include "Valves/Driver.h"
-#include "Valves/Events.h"
 #include "Valves/Errors.h"
 
 namespace Irrigation::Valve
 {
-    class OpenHandler final : public IMessageHandler
+    class OpenHandler final : public IHandler
     {
     public:
         OpenHandler(
-            Events &events,
+            IEvents &events,
             State &state,
             Driver &driver)
             : _events(events),
@@ -33,9 +31,9 @@ namespace Irrigation::Valve
             return "valve/open";
         }
 
-        Result handle(const JsonDocument &payload) override
+        Result handle(const JsonDocument &request) override
         {
-            const ValveId id = payload["id"] | "";
+            const ValveId id = request["id"] | "";
 
             if (id.isEmpty())
             {
@@ -66,16 +64,18 @@ namespace Irrigation::Valve
             entry->status = ValveStatus::Open;
             entry->updated = timestamp;
 
-            _events.publish(
-                Event::Opened{
-                    id,
-                    timestamp});
+            JsonDocument event;
+
+            event["id"] = id;
+            event["timestamp"] = timestamp;
+
+            _events.publish("valve/opened", event);
 
             return result;
         }
 
     private:
-        Events &_events;
+        IEvents &_events;
         State &_state;
         Driver &_driver;
     };

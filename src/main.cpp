@@ -1,19 +1,26 @@
 #include <Arduino.h>
-#include <Application.h>
 
-namespace
+#include "App.h"
+
+namespace Irrigation
 {
-    constexpr int BAUD_RATE = 115200;
+    constexpr uint32_t BaudRate = 115200;
     App app;
 }
 
 void setup()
 {
-    Serial.begin(BAUD_RATE);
-    app.begin();
+    Serial.begin(Irrigation::BaudRate);
+
+    const Irrigation::Result result = Irrigation::app.begin();
+
+    if (result.isFailure())
+    {
+        Serial.println(result.message());
+    }
 }
 
 void loop()
 {
-    app.update();
+    Irrigation::app.update();
 }

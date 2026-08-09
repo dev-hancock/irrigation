@@ -30,13 +30,13 @@ namespace Irrigation
         [[nodiscard]]
         bool isSuccess() const
         {
-            return _isSuccess;
+            return _success;
         }
 
         [[nodiscard]]
         bool isFailure() const
         {
-            return !_isSuccess;
+            return !_success;
         }
 
         [[nodiscard]]
@@ -53,16 +53,16 @@ namespace Irrigation
 
     private:
         Result(
-            const bool isSuccess,
+            const bool success,
             const Error error,
             String message)
-            : _isSuccess(isSuccess),
+            : _success(success),
               _error(error),
               _message(message)
         {
         }
 
-        bool _isSuccess;
+        bool _success;
         Error _error;
         String _message;
     };

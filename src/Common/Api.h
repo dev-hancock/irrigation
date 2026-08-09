@@ -2,13 +2,38 @@
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include <vector>
 
 #include "Common/Result.h"
 
 namespace Irrigation
 {
-    class IMessageHandler
+    struct Message
+    {
+        String topic;
+        String payload;
+
+        Message() = default;
+
+        explicit Message(const String &topic)
+            : topic(topic)
+        {
+        }
+
+        Message(
+            const String &topic,
+            const String &payload)
+            : topic(topic),
+              payload(payload)
+        {
+        }
+
+        const unsigned long length() const
+        {
+            return payload.length();
+        }
+    };
+
+    class IHandler
     {
     public:
         virtual const char *topic() const = 0;
@@ -18,29 +43,37 @@ namespace Irrigation
     class Router
     {
     public:
-        void add(IMessageHandler &handler)
+        Router() = default;
+
+        void add(IHandler &handler)
         {
             _handlers.push_back(&handler);
         }
 
-        [[nodiscard]]
-        bool route(
-            const String &topic,
-            const JsonDocument &payload) const
+        Result route(const String &topic, const JsonDocument &payload)
         {
-            for (IMessageHandler *handler : _handlers)
+            for (IHandler *handler : _handlers)
             {
-                if (String(handler->topic()) == topic)
+                if (handler->topic() == topic.c_str())
                 {
-                    handler->handle(payload);
-                    return true;
+                    return handler->handle(payload);
                 }
             }
 
-            return false;
+            return Result::Failure("Route not found");
         }
 
     private:
-        std::vector<IMessageHandler *> _handlers;
+        std::vector<IHandler *> _handlers;
+    };
+
+    class IEvents
+    {
+    public:
+        virtual ~IEvents() = default;
+
+        virtual void publish(
+            const String &topic,
+            const JsonDocument &payload) = 0;
     };
 }

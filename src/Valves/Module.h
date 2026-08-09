@@ -19,28 +19,29 @@ namespace Irrigation::Valve
         Module(
             State &state,
             Router &router,
-            Events &events)
+            IEvents &events)
             : _state(state),
-              _router(router),
               _driver(),
               _open(events, _state, _driver),
               _close(events, _state, _driver)
         {
+            router.add(_open);
+            router.add(_close);
         }
 
-        void begin()
+        Result begin()
         {
             const std::vector<Valve> valves = {
                 Valve{
                     .id = "1",
                     .in1Pin = 5,
                     .in2Pin = 4,
-                    .durationMs = 20},
+                    .durationMs = 200},
                 Valve{
                     .id = "2",
                     .in1Pin = 18,
                     .in2Pin = 19,
-                    .durationMs = 20}};
+                    .durationMs = 200}};
 
             _state = State(valves);
 
@@ -49,15 +50,62 @@ namespace Irrigation::Valve
                 _driver.begin(init);
             }
 
-            _router.add(_open);
-            _router.add(_close);
+            return Result::Success();
+        }
+
+        void update()
+        {
+            if (millis() - _timestamp < 1000)
+            {
+                return;
+            }
+
+            _timestamp = millis();
+
+            ValveEntry *entry = _state.find("1");
+
+            if (entry == nullptr)
+            {
+                return;
+            }
+
+            if (entry->status == ValveStatus::Open)
+            {
+                const Result result = _driver.close(entry->valve);
+
+                if (result.isFailure())
+                {
+                    return;
+                }
+
+                entry->status = ValveStatus::Closed;
+                entry->updated = millis();
+
+                return;
+            }
+
+            if (entry->status == ValveStatus::Closed)
+            {
+                const Result result = _driver.open(entry->valve);
+
+                if (result.isFailure())
+                {
+                    return;
+                }
+
+                entry->status = ValveStatus::Open;
+                entry->updated = millis();
+
+                return;
+            }
         }
 
     private:
         State &_state;
-        Router &_router;
 
         Driver _driver;
+
+        unsigned long _timestamp = 0;
 
         OpenHandler _open;
         CloseHandler _close;

@@ -10,7 +10,9 @@ namespace Irrigation::Valve
     class State
     {
     public:
-        State(const std::vector<Valve> &valves)
+        State() = default;
+
+        explicit State(const std::vector<Valve> &valves)
         {
             _valves.reserve(valves.size());
 
