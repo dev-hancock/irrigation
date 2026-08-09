@@ -9,10 +9,10 @@
 
 #include "WiFi/Module.h"
 
-#include "Mqtt/Events.h"
 #include "Mqtt/Module.h"
 
 #include "Valves/Module.h"
+#include "Device/Module.h"
 
 namespace Irrigation
 {
@@ -26,18 +26,19 @@ namespace Irrigation
 			  _mqtt(
 				  _router,
 				  _wifi.client()),
-			  _events(
-				  _mqtt.publisher()),
 			  _valves(
 				  _state.valves,
 				  _router,
-				  _events)
+				  _mqtt.events()),
+			  _device(_mqtt.events())
 		{
 		}
 
 		Result begin()
 		{
 			Result result = Result::Success();
+
+			Serial.println("System begin...");
 
 			result = _valves.begin();
 			if (result.isFailure())
@@ -57,25 +58,34 @@ namespace Irrigation
 				return result;
 			}
 
+			result = _device.begin();
+			if (result.isFailure())
+			{
+				return result;
+			}
+
+			Serial.println("System initialized");
+
 			return result;
 		}
 
 		void update()
 		{
 			_wifi.update();
+
 			_mqtt.update();
 
-			_valves.update();
+			// _valves.update();
 		}
 
 	private:
 		State _state;
 		Router _router;
 
-		Mqtt::Events _events;
 		WiFi::Module _wifi;
 		Mqtt::Module _mqtt;
 
+		Device::Module _device;
 		Valve::Module _valves;
 	};
 

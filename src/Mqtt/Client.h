@@ -3,7 +3,6 @@
 #include <ArduinoMqttClient.h>
 
 #include "Mqtt/Options.h"
-#include "Mqtt/Message.h"
 
 #include "Common/Result.h"
 #include "Common/Api.h"
@@ -41,12 +40,19 @@ namespace Irrigation::Mqtt
                     "Failed to connect to MQTT broker");
             }
 
+            Serial.print("Connected to MQTT broker: ");
+            Serial.print(options.host);
+            Serial.print(":");
+            Serial.println(options.port);
+
             return Result::Success();
         }
 
         void disconnect()
         {
             _client.stop();
+
+            Serial.println("Disconnected from MQTT broker");
         }
 
         [[nodiscard]]
@@ -63,6 +69,9 @@ namespace Irrigation::Mqtt
                     "Failed to subscribe");
             }
 
+            Serial.print("Subscribed to MQTT topic: ");
+            Serial.println(topic);
+
             return Result::Success();
         }
 
@@ -73,8 +82,6 @@ namespace Irrigation::Mqtt
             {
                 return false;
             }
-
-            _client.poll();
 
             const int size = _client.parseMessage();
 
@@ -95,10 +102,17 @@ namespace Irrigation::Mqtt
                         _client.read());
             }
 
+            Serial.print("Received MQTT message: ");
+            Serial.print(message.topic);
+            Serial.print(" (");
+            Serial.print(size);
+            Serial.print(" bytes): ");
+            Serial.println(message.payload);
+
             return true;
         }
 
-        Result publish(const Message &message)
+        Result publish(const Message &message, const bool retain = false)
         {
             if (!isConnected())
             {
@@ -108,7 +122,8 @@ namespace Irrigation::Mqtt
 
             if (!_client.beginMessage(
                     message.topic,
-                    message.length()))
+                    message.payload.length(),
+                    retain))
             {
                 return Result::Failure(
                     "Failed to begin MQTT message");
@@ -133,6 +148,13 @@ namespace Irrigation::Mqtt
                 return Result::Failure(
                     "Failed to publish MQTT message");
             }
+
+            Serial.print("Published MQTT message: ");
+            Serial.print(message.topic);
+            Serial.print(" (");
+            Serial.print(written);
+            Serial.print(" bytes): ");
+            Serial.println(message.payload);
 
             return Result::Success();
         }

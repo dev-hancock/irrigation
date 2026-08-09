@@ -3,8 +3,6 @@
 #include <Arduino.h>
 #include <utility>
 
-#include "Error.h"
-
 namespace Irrigation
 {
     class Result
@@ -12,19 +10,13 @@ namespace Irrigation
     public:
         static Result Success()
         {
-            return Result(true, Error::None, {});
+            return Result(true, {});
         }
 
         static Result Failure(
             String message)
         {
-            return Result(false, Error::None, message);
-        }
-        static Result Failure(
-            const Error error,
-            String message)
-        {
-            return Result(false, error, message);
+            return Result(false, message);
         }
 
         [[nodiscard]]
@@ -40,12 +32,6 @@ namespace Irrigation
         }
 
         [[nodiscard]]
-        Error error() const
-        {
-            return _error;
-        }
-
-        [[nodiscard]]
         const String &message() const
         {
             return _message;
@@ -54,16 +40,13 @@ namespace Irrigation
     private:
         Result(
             const bool success,
-            const Error error,
             String message)
             : _success(success),
-              _error(error),
               _message(message)
         {
         }
 
         bool _success;
-        Error _error;
         String _message;
     };
 }

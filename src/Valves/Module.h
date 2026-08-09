@@ -6,8 +6,12 @@
 
 #include "Valves/State.h"
 #include "Valves/Driver.h"
+
+#include "Valves/Api.h"
+
 #include "Valves/Handlers/Open.h"
 #include "Valves/Handlers/Close.h"
+#include "Valves/Handlers/Reset.h"
 
 #include "Common/Api.h"
 
@@ -23,10 +27,11 @@ namespace Irrigation::Valve
             : _state(state),
               _driver(),
               _open(events, _state, _driver),
-              _close(events, _state, _driver)
+              _close(events, _state, _driver),
+              _reset(events, _state, _driver),
+              _api(_open, _close, _reset)
         {
-            router.add(_open);
-            router.add(_close);
+            router.add(_api);
         }
 
         Result begin()
@@ -50,54 +55,16 @@ namespace Irrigation::Valve
                 _driver.begin(init);
             }
 
+            const Result result = _reset.handle();
+
+            if (result.isFailure())
+            {
+                return result;
+            }
+
+            Serial.println("Valves module initialized");
+
             return Result::Success();
-        }
-
-        void update()
-        {
-            if (millis() - _timestamp < 1000)
-            {
-                return;
-            }
-
-            _timestamp = millis();
-
-            ValveEntry *entry = _state.find("1");
-
-            if (entry == nullptr)
-            {
-                return;
-            }
-
-            if (entry->status == ValveStatus::Open)
-            {
-                const Result result = _driver.close(entry->valve);
-
-                if (result.isFailure())
-                {
-                    return;
-                }
-
-                entry->status = ValveStatus::Closed;
-                entry->updated = millis();
-
-                return;
-            }
-
-            if (entry->status == ValveStatus::Closed)
-            {
-                const Result result = _driver.open(entry->valve);
-
-                if (result.isFailure())
-                {
-                    return;
-                }
-
-                entry->status = ValveStatus::Open;
-                entry->updated = millis();
-
-                return;
-            }
         }
 
     private:
@@ -109,5 +76,8 @@ namespace Irrigation::Valve
 
         OpenHandler _open;
         CloseHandler _close;
+        ResetHandler _reset;
+
+        MessageHandler _api;
     };
 }

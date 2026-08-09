@@ -11,33 +11,14 @@ namespace Irrigation
     {
         String topic;
         String payload;
-
-        Message() = default;
-
-        explicit Message(const String &topic)
-            : topic(topic)
-        {
-        }
-
-        Message(
-            const String &topic,
-            const String &payload)
-            : topic(topic),
-              payload(payload)
-        {
-        }
-
-        const unsigned long length() const
-        {
-            return payload.length();
-        }
     };
 
-    class IHandler
+    class IMessageHandler
     {
     public:
-        virtual const char *topic() const = 0;
-        virtual Result handle(const JsonDocument &payload) = 0;
+        // virtual const char *topic() const = 0;
+        virtual bool canHandle(const String &topic) = 0;
+        virtual Result handle(const Message &message) = 0;
     };
 
     class Router
@@ -45,18 +26,23 @@ namespace Irrigation
     public:
         Router() = default;
 
-        void add(IHandler &handler)
+        void add(IMessageHandler &handler)
         {
             _handlers.push_back(&handler);
         }
 
-        Result route(const String &topic, const JsonDocument &payload)
+        Result route(const Message &message)
         {
-            for (IHandler *handler : _handlers)
+            Serial.print("Routing message to topic: ");
+            Serial.println(message.topic);
+
+            for (IMessageHandler *handler : _handlers)
             {
-                if (handler->topic() == topic.c_str())
+                if (handler->canHandle(message.topic))
                 {
-                    return handler->handle(payload);
+                    Result result = handler->handle(message);
+
+                    return result;
                 }
             }
 
@@ -64,7 +50,7 @@ namespace Irrigation
         }
 
     private:
-        std::vector<IHandler *> _handlers;
+        std::vector<IMessageHandler *> _handlers;
     };
 
     class IEvents
@@ -72,8 +58,9 @@ namespace Irrigation
     public:
         virtual ~IEvents() = default;
 
-        virtual void publish(
+        virtual Result publish(
             const String &topic,
-            const JsonDocument &payload) = 0;
+            const JsonDocument &payload,
+            const bool retain = false) = 0;
     };
 }

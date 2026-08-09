@@ -20,7 +20,7 @@ namespace Irrigation::Mqtt
             WiFi::Client &wifi)
             : _client(wifi.socket()),
               _consumer(_client, router),
-              _publisher(_client)
+              _events(_client)
         {
         }
 
@@ -48,6 +48,8 @@ namespace Irrigation::Mqtt
                 return result;
             }
 
+            Serial.println("MQTT module initialized");
+
             return _consumer.begin();
         }
 
@@ -55,10 +57,13 @@ namespace Irrigation::Mqtt
         {
             if (!_client.isConnected())
             {
+                Serial.println("MQTT disconnected, attempting to reconnect...");
+
                 const Result result = _client.connect(Options::load());
 
                 if (result.isFailure())
                 {
+                    Serial.println("Failed to reconnect to MQTT");
                     return;
                 }
             }
@@ -67,14 +72,14 @@ namespace Irrigation::Mqtt
         }
 
         [[nodiscard]]
-        Publisher &publisher()
+        IEvents &events()
         {
-            return _publisher;
+            return _events;
         }
 
     private:
         Client _client;
         Consumer _consumer;
-        Publisher _publisher;
+        Publisher _events;
     };
 }

@@ -35,6 +35,26 @@ namespace Irrigation::Valve
             return nullptr;
         }
 
+        auto begin()
+        {
+            return _valves.begin();
+        }
+
+        auto begin() const
+        {
+            return _valves.begin();
+        }
+
+        auto end()
+        {
+            return _valves.end();
+        }
+
+        auto end() const
+        {
+            return _valves.end();
+        }
+
     private:
         std::vector<ValveEntry> _valves;
     };

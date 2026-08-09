@@ -3,14 +3,15 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 
-#include "Mqtt/Message.h"
+#include "Common/Api.h"
+
 #include "Mqtt/Client.h"
 
-#include "Device.h"
+#include "Device/Id.h"
 
 namespace Irrigation::Mqtt
 {
-    class Publisher
+    class Publisher final : public IEvents
     {
     public:
         explicit Publisher(Client &client)
@@ -20,20 +21,27 @@ namespace Irrigation::Mqtt
 
         Result publish(
             const String &topic,
-            const JsonDocument &payload)
+            const JsonDocument &payload,
+            const bool retain = false) override
         {
-            Message message = Message(topic);
+
+            Message message{
+                .topic = prefix() + topic,
+                .payload = ""};
 
             serializeJson(payload, message.payload);
 
-            return _client.publish(message);
+            return _client.publish(message, retain);
         }
 
     private:
-        String prefix() const
+        String
+        prefix() const
         {
             return String("irrigation/") +
                    Device::id() +
+                   "/" +
+                   "event" +
                    "/";
         }
 

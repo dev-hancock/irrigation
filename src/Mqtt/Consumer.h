@@ -8,7 +8,7 @@
 #include "Common/Api.h"
 #include "Common/Result.h"
 
-#include "Device.h"
+#include "Device/Id.h"
 
 namespace Irrigation::Mqtt
 {
@@ -37,44 +37,49 @@ namespace Irrigation::Mqtt
                 return;
             }
 
-            consume(message);
+            const Result result = consume(message);
+
+            if (result.isFailure())
+            {
+                Serial.print("Failed to consume MQTT message: ");
+                Serial.println(result.message());
+            }
         }
 
     private:
-        void consume(const Message &message)
+        Result consume(const Message &message)
         {
-            const String topic = message.topic;
+            const String base = prefix();
 
-            if (!topic.startsWith(prefix()))
+            if (!message.topic.startsWith(base))
             {
-                return;
+                return Result::Failure(
+                    "Unexpected MQTT topic");
             }
 
-            JsonDocument payload;
+            Message routed = message;
 
-            const DeserializationError error =
-                deserializeJson(payload, message.payload);
+            routed.topic =
+                message.topic.substring(
+                    base.length());
 
-            if (error)
+            if (routed.topic.isEmpty())
             {
-                return;
+                return Result::Failure(
+                    "Missing MQTT route");
             }
 
-            String route = topic.substring(prefix().length());
-
-            if (route.isEmpty())
-            {
-                return;
-            }
-
-            _router.route(route, payload);
+            return _router.route(routed);
         }
 
         [[nodiscard]]
         String prefix() const
         {
-            return String("irrigation/") +
+            return String("irrigation") +
+                   "/" +
                    Device::id() +
+                   "/" +
+                   "command" +
                    "/";
         }
 

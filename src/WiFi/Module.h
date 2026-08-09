@@ -31,6 +31,8 @@ namespace Irrigation::WiFi
 
             _options = options;
 
+            Serial.println("WiFi module initialized");
+
             return _client.connect(_options);
         }
 
@@ -45,6 +47,8 @@ namespace Irrigation::WiFi
             {
                 return;
             }
+
+            Serial.println("WiFi disconnected, attempting to reconnect...");
 
             _client.connect(_options);
 

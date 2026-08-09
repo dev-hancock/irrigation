@@ -7,6 +7,7 @@ namespace Irrigation::Valve
 {
     enum class ValveStatus
     {
+        Unknown,
         Open,
         Closed
     };
@@ -35,7 +36,7 @@ namespace Irrigation::Valve
         }
 
         Valve valve;
-        ValveStatus status{ValveStatus::Closed};
+        ValveStatus status{ValveStatus::Unknown};
         Timestamp updated{0};
     };
 }

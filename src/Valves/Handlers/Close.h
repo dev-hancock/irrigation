@@ -4,8 +4,6 @@
 #include <ArduinoJson.h>
 #include <vector>
 
-#include "Common/Api.h"
-
 #include "Valves/Types.h"
 #include "Valves/State.h"
 #include "Valves/Driver.h"
@@ -13,7 +11,7 @@
 
 namespace Irrigation::Valve
 {
-    class CloseHandler final : public IHandler
+    class CloseHandler
     {
     public:
         CloseHandler(
@@ -26,12 +24,7 @@ namespace Irrigation::Valve
         {
         }
 
-        const char *topic() const override
-        {
-            return "valve/close";
-        }
-
-        Result handle(const JsonDocument &request) override
+        Result handle(const JsonDocument &request)
         {
             const ValveId id = request["id"] | "";
 
