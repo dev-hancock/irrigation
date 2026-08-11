@@ -1,4 +1,6 @@
-﻿namespace Irrigation.Infrastructure.Mqtt
+﻿using ErrorOr;
+
+namespace Irrigation.Infrastructure.Mqtt
 {
     public interface IMqttClient
     {
@@ -16,6 +18,6 @@
     {
         bool CanHandle(Message message);
 
-        Task Handle(Message message, CancellationToken ct);
+        Task<ErrorOr<Success>> Handle(Message message, CancellationToken ct);
     }
 }

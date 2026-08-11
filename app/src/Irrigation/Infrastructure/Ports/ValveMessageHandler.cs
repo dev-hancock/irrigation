@@ -1,6 +1,5 @@
 ﻿using Irrigation.Application.Common;
 using Irrigation.Application.Valves.Commands;
-using Irrigation.Domain.Valves;
 using Irrigation.Infrastructure.Mqtt;
 using System.Text.Json;
 

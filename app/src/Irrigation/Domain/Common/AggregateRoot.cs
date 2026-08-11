@@ -1,15 +1,15 @@
-﻿namespace Irrigation.Domain.Common
+﻿using Mediator;
+
+namespace Irrigation.Domain.Common
 {
-    public interface IRequest
+    public abstract class AggregateRoot
     {
+        private readonly List<INotification> _events = [];
 
-    }
-    public interface INotification
-    {
+        public IReadOnlyCollection<INotification> Events => _events;
 
-    }
+        protected void Raise(INotification @event) => _events.Add(@event);
 
-    public class AggregateRoot
-    {
+        public void ClearEvents() => _events.Clear();
     }
 }

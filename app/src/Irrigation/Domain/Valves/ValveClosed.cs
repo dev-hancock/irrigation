@@ -1,4 +1,4 @@
-﻿using Irrigation.Domain.Common;
+﻿using Mediator;
 
 namespace Irrigation.Domain.Valves
 {

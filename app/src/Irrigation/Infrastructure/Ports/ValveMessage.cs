@@ -5,7 +5,7 @@ namespace Irrigation.Infrastructure.Ports
     public sealed record ValveMessage
     {
         [JsonPropertyName("id")]
-        public string Id { get; init; }
+        public required string Id { get; init; }
 
         [JsonPropertyName("timestamp")]
         public long Timestamp { get; init; }

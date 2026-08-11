@@ -4,17 +4,16 @@ namespace Irrigation.Application.Common
 {
     public interface IEventBus
     {
-        Task PublishAsync<T>(T @event);
+        Task Publish<T>(T @event, CancellationToken ct = default);
 
-        IDisposable Subscribe<T>(Func<T, Task> handler);
+        IDisposable Subscribe<T>(Func<T, CancellationToken, Task> handler);
     }
 
     public class EventBus : IEventBus
     {
         private readonly Dictionary<Type, List<Delegate>> _handlers = [];
 
-        public IDisposable Subscribe<T>(
-            Func<T, Task> handler)
+        public IDisposable Subscribe<T>(Func<T, CancellationToken, Task> handler)
         {
             var type = typeof(T);
 
@@ -26,11 +25,10 @@ namespace Irrigation.Application.Common
 
             handlers.Add(handler);
 
-            return new Subscription(
-                () => handlers.Remove(handler));
+            return new Subscription(() => handlers.Remove(handler));
         }
 
-        public async Task PublishAsync<T>(T @event)
+        public async Task Publish<T>(T @event, CancellationToken ct = default)
         {
             if (!_handlers.TryGetValue(typeof(T), out var handlers))
             {
@@ -39,7 +37,9 @@ namespace Irrigation.Application.Common
 
             foreach (var handler in handlers.ToArray())
             {
-                await ((Func<T, Task>)handler)(@event);
+                ct.ThrowIfCancellationRequested();
+
+                await ((Func<T, CancellationToken, Task>)handler)(@event, ct);
             }
         }
 
@@ -49,20 +49,4 @@ namespace Irrigation.Application.Common
         }
     }
 
-    public interface INotificationHandler<T> where T : INotification
-    {
-        Task Handle(T notification, CancellationToken ct = default);
-    }
-    public interface IRequestHandler<T> where T : IRequest
-    {
-        Task Handle(T request, CancellationToken ct = default);
-    }
-
-
-    public interface IMediator
-    {
-        Task Publish<T>(T notification, CancellationToken ct = default) where T : INotification;
-
-        Task Send<T>(T request, CancellationToken ct = default) where T : IRequest;
-    }
 }

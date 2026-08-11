@@ -21,7 +21,7 @@ namespace Irrigation.Domain.Valves
 
             State = ValveState.Opening;
 
-            AddNotification(new ValveOpening
+            Raise(new ValveOpening
             {
                 Id = Id
             });
@@ -41,7 +41,7 @@ namespace Irrigation.Domain.Valves
 
             State = ValveState.Opened;
 
-            AddNotification(new ValveOpened
+            Raise(new ValveOpened
             {
                 Id = Id
             });
@@ -56,7 +56,7 @@ namespace Irrigation.Domain.Valves
 
             State = ValveState.Closing;
 
-            AddNotification(new ValveClosing
+            Raise(new ValveClosing
             {
                 Id = Id
             });
@@ -71,7 +71,7 @@ namespace Irrigation.Domain.Valves
 
             State = ValveState.Closed;
 
-            AddNotification(new ValveClosed
+            Raise(new ValveClosed
             {
                 Id = Id
             });
