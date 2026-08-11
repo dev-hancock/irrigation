@@ -484,7 +484,5 @@ $RECYCLE.BIN/
 
 .pio
 .vs
-*/obj/*
-*/bin/*
 
 secrets.h

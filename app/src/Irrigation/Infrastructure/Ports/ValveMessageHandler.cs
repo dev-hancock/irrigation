@@ -1,7 +1,8 @@
-﻿using Irrigation.Application.Common;
-using Irrigation.Application.Valves.Commands;
+﻿using Irrigation.Application.Valves.Commands;
 using Irrigation.Infrastructure.Mqtt;
 using System.Text.Json;
+using ErrorOr;
+using Mediator;
 
 namespace Irrigation.Infrastructure.Ports
 {
@@ -12,18 +13,18 @@ namespace Irrigation.Infrastructure.Ports
             return message.Route.StartsWith("valve/");
         }
 
-        public Task Handle(Message message, CancellationToken ct)
+        public async Task<ErrorOr<Success>> Handle(Message message, CancellationToken ct)
         {
             var payload = JsonSerializer.Deserialize<ValveMessage>(message.Payload);
 
             if (payload is null)
             {
-                return Task.CompletedTask; // ignore invalid messages
+                return Result.Success;
             }
 
             if (message.Route == ValveTopics.Opened)
             {
-                return mediator.Send(
+                return await mediator.Send(
                     new ValveOpenedCommand
                 {
                     Id = payload.Id,
@@ -33,7 +34,7 @@ namespace Irrigation.Infrastructure.Ports
 
             if (message.Route == ValveTopics.Closed)
             {
-                return mediator.Send(
+                return await mediator.Send(
                     new ValveClosedCommand
                 {
                     Id = payload.Id,
@@ -41,7 +42,7 @@ namespace Irrigation.Infrastructure.Ports
                 }, ct);
             }
 
-            return Task.CompletedTask;
+            return Result.Success;
         }
     }
 }
