@@ -1,0 +1,6 @@
+services:
+  irrigation:
+    image: ${DOCKER_REGISTRY-}irrigation
+    build:
+      context: .
+      dockerfile: Irrigation/Dockerfile

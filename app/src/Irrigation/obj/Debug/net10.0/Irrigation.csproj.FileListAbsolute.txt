@@ -1,0 +1,10 @@
+C:\Projects\Irrigation\Irrigation\Irrigation\obj\Debug\net10.0\EmbeddedAttribute.cs
+C:\Projects\Irrigation\Irrigation\Irrigation\obj\Debug\net10.0\ValidatableTypeAttribute.cs
+C:\Projects\Irrigation\Irrigation\Irrigation\obj\Debug\net10.0\Irrigation.csproj.AssemblyReference.cache
+C:\Projects\Irrigation\Irrigation\Irrigation\obj\Debug\net10.0\rpswa.dswa.cache.json
+C:\Projects\Irrigation\Irrigation\Irrigation\obj\Debug\net10.0\Irrigation.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\Irrigation\Irrigation\Irrigation\obj\Debug\net10.0\Irrigation.AssemblyInfoInputs.cache
+C:\Projects\Irrigation\Irrigation\Irrigation\obj\Debug\net10.0\Irrigation.AssemblyInfo.cs
+C:\Projects\Irrigation\Irrigation\Irrigation\obj\Debug\net10.0\Irrigation.csproj.CoreCompileInputs.cache
+C:\Projects\Irrigation\Irrigation\Irrigation\obj\Debug\net10.0\Irrigation.MvcApplicationPartsAssemblyInfo.cache
+C:\Projects\Irrigation\Irrigation\Irrigation\obj\Debug\net10.0\Irrigation.sourcelink.json

@@ -1,0 +1,264 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Projects\\Irrigation\\Irrigation\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|c:\\projects\\irrigation\\irrigation\\irrigation\\domain\\valves\\valveopened.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|solutionrelative:irrigation\\domain\\valves\\valveopened.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|c:\\projects\\irrigation\\irrigation\\irrigation\\application\\valves\\events\\valveopenedhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|solutionrelative:irrigation\\application\\valves\\events\\valveopenedhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|c:\\projects\\irrigation\\irrigation\\irrigation\\application\\common\\ieventbus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|solutionrelative:irrigation\\application\\common\\ieventbus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|c:\\projects\\irrigation\\irrigation\\irrigation\\domain\\common\\aggregateroot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|solutionrelative:irrigation\\domain\\common\\aggregateroot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|c:\\projects\\irrigation\\irrigation\\irrigation\\domain\\valves\\valve.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|solutionrelative:irrigation\\domain\\valves\\valve.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|c:\\projects\\irrigation\\irrigation\\irrigation\\application\\valves\\commands\\closevalvehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|solutionrelative:irrigation\\application\\valves\\commands\\closevalvehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|c:\\projects\\irrigation\\irrigation\\irrigation\\application\\valves\\commands\\openvalvehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|solutionrelative:irrigation\\application\\valves\\commands\\openvalvehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|c:\\projects\\irrigation\\irrigation\\irrigation\\application\\valves\\commands\\resetvalvehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|solutionrelative:irrigation\\application\\valves\\commands\\resetvalvehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|c:\\projects\\irrigation\\irrigation\\irrigation\\domain\\valves\\valveopening.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|solutionrelative:irrigation\\domain\\valves\\valveopening.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|c:\\projects\\irrigation\\irrigation\\irrigation\\domain\\valves\\valveclosing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|solutionrelative:irrigation\\domain\\valves\\valveclosing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|c:\\projects\\irrigation\\irrigation\\irrigation\\domain\\valves\\valveclosed.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|solutionrelative:irrigation\\domain\\valves\\valveclosed.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|c:\\projects\\irrigation\\irrigation\\irrigation\\infrastructure\\mqtt\\mqtt.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|solutionrelative:irrigation\\infrastructure\\mqtt\\mqtt.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|c:\\projects\\irrigation\\irrigation\\irrigation\\infrastructure\\ports\\valve.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5EE9535C-3B25-4E04-9C6C-58F97B70AFDE}|Irrigation\\Irrigation.csproj|solutionrelative:irrigation\\infrastructure\\ports\\valve.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{81DDED9D-158B-E303-5F62-77A2896D2A5A}|docker-compose.dcproj|c:\\projects\\irrigation\\irrigation\\docker-compose.dcproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{81DDED9D-158B-E303-5F62-77A2896D2A5A}|docker-compose.dcproj|solutionrelative:docker-compose.dcproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 567,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "CloseValveHandler.cs",
+              "DocumentMoniker": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Application\\Valves\\Commands\\CloseValveHandler.cs",
+              "RelativeDocumentMoniker": "Irrigation\\Application\\Valves\\Commands\\CloseValveHandler.cs",
+              "ToolTip": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Application\\Valves\\Commands\\CloseValveHandler.cs",
+              "RelativeToolTip": "Irrigation\\Application\\Valves\\Commands\\CloseValveHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-10T19:23:11.472Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Valve.cs",
+              "DocumentMoniker": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Domain\\Valves\\Valve.cs",
+              "RelativeDocumentMoniker": "Irrigation\\Domain\\Valves\\Valve.cs",
+              "ToolTip": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Domain\\Valves\\Valve.cs",
+              "RelativeToolTip": "Irrigation\\Domain\\Valves\\Valve.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAowCsAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-10T19:11:56.032Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IEventBus.cs",
+              "DocumentMoniker": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Application\\Common\\IEventBus.cs",
+              "RelativeDocumentMoniker": "Irrigation\\Application\\Common\\IEventBus.cs",
+              "ToolTip": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Application\\Common\\IEventBus.cs",
+              "RelativeToolTip": "Irrigation\\Application\\Common\\IEventBus.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAiwC4AAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-10T19:07:43.709Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AggregateRoot.cs",
+              "DocumentMoniker": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Domain\\Common\\AggregateRoot.cs",
+              "RelativeDocumentMoniker": "Irrigation\\Domain\\Common\\AggregateRoot.cs",
+              "ToolTip": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Domain\\Common\\AggregateRoot.cs",
+              "RelativeToolTip": "Irrigation\\Domain\\Common\\AggregateRoot.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAUAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-10T19:12:19.091Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ValveOpened.cs",
+              "DocumentMoniker": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Domain\\Valves\\ValveOpened.cs",
+              "RelativeDocumentMoniker": "Irrigation\\Domain\\Valves\\ValveOpened.cs",
+              "ToolTip": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Domain\\Valves\\ValveOpened.cs*",
+              "RelativeToolTip": "Irrigation\\Domain\\Valves\\ValveOpened.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAQAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-10T19:14:31.912Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ResetValveHandler.cs",
+              "DocumentMoniker": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Application\\Valves\\Commands\\ResetValveHandler.cs",
+              "RelativeDocumentMoniker": "Irrigation\\Application\\Valves\\Commands\\ResetValveHandler.cs",
+              "ToolTip": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Application\\Valves\\Commands\\ResetValveHandler.cs",
+              "RelativeToolTip": "Irrigation\\Application\\Valves\\Commands\\ResetValveHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-10T19:22:52.335Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ValveOpening.cs",
+              "DocumentMoniker": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Domain\\Valves\\ValveOpening.cs",
+              "RelativeDocumentMoniker": "Irrigation\\Domain\\Valves\\ValveOpening.cs",
+              "ToolTip": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Domain\\Valves\\ValveOpening.cs*",
+              "RelativeToolTip": "Irrigation\\Domain\\Valves\\ValveOpening.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-10T19:14:39.398Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ValveClosing.cs",
+              "DocumentMoniker": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Domain\\Valves\\ValveClosing.cs",
+              "RelativeDocumentMoniker": "Irrigation\\Domain\\Valves\\ValveClosing.cs",
+              "ToolTip": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Domain\\Valves\\ValveClosing.cs*",
+              "RelativeToolTip": "Irrigation\\Domain\\Valves\\ValveClosing.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-10T19:14:44.959Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "OpenValveHandler.cs",
+              "DocumentMoniker": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Application\\Valves\\Commands\\OpenValveHandler.cs",
+              "RelativeDocumentMoniker": "Irrigation\\Application\\Valves\\Commands\\OpenValveHandler.cs",
+              "ToolTip": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Application\\Valves\\Commands\\OpenValveHandler.cs",
+              "RelativeToolTip": "Irrigation\\Application\\Valves\\Commands\\OpenValveHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-10T18:50:08.019Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ValveClosed.cs",
+              "DocumentMoniker": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Domain\\Valves\\ValveClosed.cs",
+              "RelativeDocumentMoniker": "Irrigation\\Domain\\Valves\\ValveClosed.cs",
+              "ToolTip": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Domain\\Valves\\ValveClosed.cs*",
+              "RelativeToolTip": "Irrigation\\Domain\\Valves\\ValveClosed.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-10T19:14:50.191Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Valve.cs",
+              "DocumentMoniker": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Infrastructure\\Ports\\Valve.cs",
+              "RelativeDocumentMoniker": "Irrigation\\Infrastructure\\Ports\\Valve.cs",
+              "ToolTip": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Infrastructure\\Ports\\Valve.cs",
+              "RelativeToolTip": "Irrigation\\Infrastructure\\Ports\\Valve.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-10T18:05:13.526Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Mqtt.cs",
+              "DocumentMoniker": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Infrastructure\\Mqtt\\Mqtt.cs",
+              "RelativeDocumentMoniker": "Irrigation\\Infrastructure\\Mqtt\\Mqtt.cs",
+              "ToolTip": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Infrastructure\\Mqtt\\Mqtt.cs",
+              "RelativeToolTip": "Irrigation\\Infrastructure\\Mqtt\\Mqtt.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-10T18:02:50.2Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "docker-compose",
+              "DocumentMoniker": "C:\\Projects\\Irrigation\\Irrigation\\docker-compose.dcproj",
+              "RelativeDocumentMoniker": "docker-compose.dcproj",
+              "ToolTip": "C:\\Projects\\Irrigation\\Irrigation\\docker-compose.dcproj",
+              "RelativeToolTip": "docker-compose.dcproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-08-10T17:37:00.32Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 607,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ValveOpenedHandler.cs",
+              "DocumentMoniker": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Application\\Valves\\Events\\ValveOpenedHandler.cs",
+              "RelativeDocumentMoniker": "Irrigation\\Application\\Valves\\Events\\ValveOpenedHandler.cs",
+              "ToolTip": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Application\\Valves\\Events\\ValveOpenedHandler.cs",
+              "RelativeToolTip": "Irrigation\\Application\\Valves\\Events\\ValveOpenedHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAABFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-10T19:03:04.265Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
