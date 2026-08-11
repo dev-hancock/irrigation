@@ -206,11 +206,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Irrigation.csproj",
+      "projectUniqueName": "C:\\Projects\\Irrigation\\app\\src\\Irrigation\\Irrigation.csproj",
       "projectName": "Irrigation",
-      "projectPath": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Irrigation.csproj",
+      "projectPath": "C:\\Projects\\Irrigation\\app\\src\\Irrigation\\Irrigation.csproj",
       "packagesPath": "C:\\Users\\devha\\.nuget\\packages\\",
-      "outputPath": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\obj\\",
+      "outputPath": "C:\\Projects\\Irrigation\\app\\src\\Irrigation\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

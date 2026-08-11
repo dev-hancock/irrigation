@@ -2,5 +2,5 @@
   <Project Path="docker-compose.dcproj">
     <Build />
   </Project>
-  <Project Path="Irrigation/Irrigation.csproj" />
+  <Project Path="src/Irrigation/Irrigation.csproj" />
 </Solution>

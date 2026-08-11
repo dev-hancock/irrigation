@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "K4vUP+x76Zw=",
+  "dgSpecHash": "kiiHWDwWxGk=",
   "success": true,
-  "projectFilePath": "C:\\Projects\\Irrigation\\Irrigation\\Irrigation\\Irrigation.csproj",
+  "projectFilePath": "C:\\Projects\\Irrigation\\app\\src\\Irrigation\\Irrigation.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\devha\\.nuget\\packages\\ardalis.specification\\9.3.1\\ardalis.specification.9.3.1.nupkg.sha512",
     "C:\\Users\\devha\\.nuget\\packages\\erroror\\2.1.1\\erroror.2.1.1.nupkg.sha512",

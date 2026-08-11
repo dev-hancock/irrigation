@@ -19,6 +19,8 @@
   <ItemGroup>
     <Folder Include="Application\Devices\" />
     <Folder Include="Domain\Zones\" />
+    <Folder Include="Api\" />
+    <Folder Include="Web\" />
   </ItemGroup>
 
 </Project>
