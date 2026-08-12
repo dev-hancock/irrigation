@@ -1,29 +1,25 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Irrigation</a>
-    </div>
-</div>
+﻿<div class="sidebar-menu">
+    <a class="brand" href="" aria-label="Irrigation dashboard">
+        <i class="brand__mark ti ti-leaf" aria-hidden="true"></i>
+        <span class="brand__name">Irrigation</span>
+    </a>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler"/>
-
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
+    <nav class="navigation" aria-label="Main navigation">
+        <NavLink class="navigation__link" href="" Match="NavLinkMatch.All"><i class="ti ti-layout-dashboard" aria-hidden="true"></i><span>Dashboard</span></NavLink>
+        <NavLink class="navigation__link" href="valves"><i class="ti ti-droplet" aria-hidden="true"></i><span>Valves</span></NavLink>
+        <NavLink class="navigation__link" href="schedules"><i class="ti ti-calendar-event" aria-hidden="true"></i><span>Schedules</span></NavLink>
+        <NavLink class="navigation__link" href="logs"><i class="ti ti-clipboard-list" aria-hidden="true"></i><span>Logs</span></NavLink>
+        <NavLink class="navigation__link" href="settings"><i class="ti ti-settings" aria-hidden="true"></i><span>Settings</span></NavLink>
+        <NavLink class="navigation__link" href="system"><i class="ti ti-device-desktop" aria-hidden="true"></i><span>System</span></NavLink>
     </nav>
+
+    <section class="system-status" aria-label="System status">
+        <div class="system-status__heading"><span class="system-status__indicator" aria-hidden="true"></span>System Online</div>
+        <dl class="system-status__details">
+            <div><dt>Controller</dt><dd>ESP32 Controller</dd></div>
+            <div><dt>Uptime</dt><dd>2d 14h 32m</dd></div>
+            <div><dt>IP</dt><dd>192.168.1.50</dd></div>
+            <div><dt>Firmware</dt><dd>1.0.3</dd></div>
+        </dl>
+    </section>
 </div>

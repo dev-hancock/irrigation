@@ -1,16 +1,24 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu/>
-    </div>
+<div class="app-shell">
+    <aside class="app-sidebar">
+        <NavMenu />
+    </aside>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
+    <main class="app-main">
+        <header class="app-topbar">
+            <div class="app-topbar__title">Irrigation Controller</div>
+            <div class="app-topbar__actions">
+                <span class="connection-status"><span class="connection-status__dot" aria-hidden="true"></span>Connected</span>
+                <button class="icon-button notification-button" type="button" aria-label="Notifications">
+                    <i class="ti ti-bell" aria-hidden="true"></i><span class="notification-button__badge">2</span>
+                </button>
+                <button class="icon-button" type="button" aria-label="Settings"><i class="ti ti-settings" aria-hidden="true"></i></button>
+                <button class="icon-button" type="button" aria-label="Toggle color theme"><i class="ti ti-moon" aria-hidden="true"></i></button>
+            </div>
+        </header>
 
-        <article class="content px-4">
+        <article class="app-content">
             @Body
         </article>
     </main>

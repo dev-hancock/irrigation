@@ -1,0 +1,8 @@
+.activity-list { padding: 0 1rem 0.5rem; }
+.activity-item { display: grid; grid-template-columns: 0.4rem 3.75rem minmax(8rem, 1fr) auto; min-height: 2rem; align-items: center; gap: 0.4rem; border-top: 1px solid var(--color-border); color: #334155; font-size: 0.65rem; }
+.activity-item__indicator { width: 0.32rem; height: 0.32rem; border-radius: 50%; }
+.activity-item__indicator--success { background: var(--color-primary); }
+.activity-item__indicator--danger { background: var(--color-danger); }
+.activity-item time, .activity-item small { color: var(--color-muted); }
+.activity-item small { font-size: inherit; }
+@media (max-width: 640.98px) { .activity-item { grid-template-columns: 0.4rem 3.75rem minmax(6rem, 1fr); } .activity-item small { display: none; } }

@@ -1,0 +1,17 @@
+.dashboard-panel { overflow: hidden; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: var(--color-surface); box-shadow: var(--shadow-card); }
+.dashboard-panel__header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem; }
+.dashboard-panel__header h2 { margin: 0; font-size: 0.95rem; font-weight: 750; }
+.valve-table__bulk-actions, .valve-table__controls { display: flex; gap: 0.65rem; }
+.valve-table__scroll { overflow-x: auto; }
+.valve-table { width: 100%; min-width: 43rem; border-collapse: collapse; font-size: 0.7rem; }
+.valve-table th { padding: 0.65rem 0.8rem; border-block: 1px solid var(--color-border); background: #f8fafc; color: #526273; font-size: 0.62rem; font-weight: 700; text-align: left; }
+.valve-table td { padding: 0.65rem 0.8rem; border-bottom: 1px solid var(--color-border); vertical-align: middle; }
+.valve-table tbody tr:last-child td { border-bottom: 0; }
+.valve-table small, .valve-table td > span:not(.status-pill) { display: block; color: var(--color-muted); font-size: 0.64rem; }
+.valve-table__identity { display: flex; align-items: center; gap: 0.75rem; }
+.valve-table__identity strong { display: block; color: var(--color-text); font-size: 0.72rem; }
+.valve-table__number { display: grid; width: 1.8rem; height: 1.8rem; place-items: center; border-radius: 50%; background: var(--color-blue); color: white; font-size: 0.85rem; font-weight: 750; }
+.status-pill { display: inline-block; margin-bottom: 0.2rem; padding: 0.16rem 0.35rem; border-radius: 0.25rem; font-size: 0.57rem; font-weight: 750; text-transform: uppercase; }
+.status-pill--open { background: var(--color-primary-soft); color: var(--color-primary-dark); }
+.status-pill--closed { background: #eef1f5; color: #475569; }
+@media (max-width: 640.98px) { .dashboard-panel__header { align-items: flex-start; flex-direction: column; } .valve-table__bulk-actions { width: 100%; } .valve-table__bulk-actions .dashboard-button { flex: 1; } }

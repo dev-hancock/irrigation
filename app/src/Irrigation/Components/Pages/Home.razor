@@ -1,7 +1,63 @@
 ﻿@page "/"
+@using Irrigation.Components.Dashboard
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Irrigation Dashboard</PageTitle>
 
-<h1>Hello, world!</h1>
+<section class="dashboard-page" aria-labelledby="dashboard-heading">
+    <header class="dashboard-page__header">
+        <div>
+            <h1 id="dashboard-heading">Dashboard</h1>
+            <p>Overview of your irrigation system</p>
+        </div>
+        <div class="dashboard-page__actions">
+            <button class="dashboard-button" type="button"><i class="ti ti-refresh" aria-hidden="true"></i>Refresh</button>
+            <button class="dashboard-button dashboard-button--primary" type="button"><i class="ti ti-restore" aria-hidden="true"></i>Reset All Valves</button>
+        </div>
+    </header>
 
-Welcome to your new app.
+    <div class="metric-grid">
+        @foreach (var metric in Metrics)
+        {
+            <MetricCard Metric="metric" />
+        }
+    </div>
+
+    <ValveTable Valves="Valves" />
+
+    <div class="dashboard-page__lower-grid">
+        <ActiveSchedules Schedules="Schedules" />
+        <RecentActivity Activities="Activities" />
+    </div>
+</section>
+
+@code {
+    private static IReadOnlyList<DashboardMetric> Metrics { get; } =
+    [
+        new("Total Valves", "4", "Configured", "ti ti-droplet", "blue"),
+        new("Open Valves", "1", "25%", "ti ti-circle-check", "green"),
+        new("Active Schedules", "2", "Running now", "ti ti-clock", "slate"),
+        new("Next Schedule", "18:30", "Garden Bed Watering", "ti ti-calendar-event", "amber")
+    ];
+
+    private static IReadOnlyList<ValveSummary> Valves { get; } =
+    [
+        new(1, "Front Lawn", "Zone 1", true, "10:14:23", "10:14:23|May 12, 2025"),
+        new(2, "Garden Beds", "Zone 2", false, "09:45:10", "09:45:10|May 12, 2025"),
+        new(3, "Greenhouse", "Zone 3", false, "08:30:05", "08:30:05|May 12, 2025"),
+        new(4, "Backyard Trees", "Zone 4", false, "07:15:42", "07:15:42|May 12, 2025")
+    ];
+
+    private static IReadOnlyList<ScheduleSummary> Schedules { get; } =
+    [
+        new("Morning Watering", "Daily · 06:00", true),
+        new("Evening Garden", "Daily · 18:30", true)
+    ];
+
+    private static IReadOnlyList<ActivitySummary> Activities { get; } =
+    [
+        new("10:14:23", "Valve 1 opened", "Manual", true),
+        new("09:45:10", "Valve 2 closed", "Manual", false),
+        new("08:30:05", "Valve 3 closed", "Schedule", false),
+        new("07:15:42", "Valve 4 closed", "Schedule", false)
+    ];
+}

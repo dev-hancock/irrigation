@@ -1,0 +1,13 @@
+<section class="metric-card">
+    <div class="metric-card__icon metric-card__icon--@Metric.Tone"><i class="@Metric.Icon" aria-hidden="true"></i></div>
+    <div>
+        <p class="metric-card__label">@Metric.Label</p>
+        <p class="metric-card__value">@Metric.Value</p>
+        <p class="metric-card__detail">@Metric.Detail</p>
+    </div>
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public DashboardMetric Metric { get; set; } = default!;
+}

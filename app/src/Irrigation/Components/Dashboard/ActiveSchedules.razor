@@ -1,0 +1,14 @@
+<section class="dashboard-panel compact-panel">
+    <header class="dashboard-panel__header"><h2>Active Schedules</h2><a class="panel-link" href="schedules">View All</a></header>
+    <div class="schedule-list">
+        @foreach (var schedule in Schedules)
+        {
+            <div class="schedule-item"><span class="schedule-item__icon"><i class="ti ti-player-play" aria-hidden="true"></i></span><div class="schedule-item__content"><strong>@schedule.Name</strong><small>@schedule.Detail</small></div>@if (schedule.IsRunning) { <span class="status-pill status-pill--open">Running</span> }<button class="more-button" type="button" aria-label="More options for @schedule.Name"><i class="ti ti-dots-vertical" aria-hidden="true"></i></button></div>
+        }
+    </div>
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public IReadOnlyList<ScheduleSummary> Schedules { get; set; } = [];
+}

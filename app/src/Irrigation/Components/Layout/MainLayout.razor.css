@@ -1,98 +1,120 @@
-.page {
-    position: relative;
+.app-shell {
     display: flex;
-    flex-direction: column;
+    min-height: 100vh;
 }
 
-main {
+.app-sidebar {
+    position: sticky;
+    top: 0;
+    width: 11.75rem;
+    height: 100vh;
+    flex: 0 0 11.75rem;
+    overflow-y: auto;
+    background: linear-gradient(180deg, var(--color-navy) 0%, var(--color-navy-deep) 100%);
+}
+
+.app-main {
+    min-width: 0;
     flex: 1;
 }
 
-.sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+.app-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    min-height: 3.45rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+    background: rgb(255 255 255 / 96%);
+    backdrop-filter: blur(8px);
 }
 
-.top-row {
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #d6d5d5;
-    justify-content: flex-end;
-    height: 3.5rem;
+.app-topbar__title {
+    font-size: 1.05rem;
+    font-weight: 750;
+}
+
+.app-topbar__actions,
+.connection-status {
     display: flex;
     align-items: center;
 }
 
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-        text-decoration: none;
-    }
+.app-topbar__actions {
+    gap: 0.9rem;
+}
 
-    .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-        text-decoration: underline;
-    }
+.connection-status {
+    gap: 0.35rem;
+    color: #334155;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
 
-    .top-row ::deep a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+.connection-status__dot {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background: var(--color-primary);
+}
+
+.icon-button {
+    position: relative;
+    display: inline-grid;
+    width: 1.75rem;
+    height: 1.75rem;
+    place-items: center;
+    border: 0;
+    border-radius: 0.35rem;
+    background: transparent;
+    color: #4b5d70;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.icon-button:hover {
+    background: #f0f4f8;
+}
+
+.notification-button__badge {
+    position: absolute;
+    top: -0.15rem;
+    right: -0.15rem;
+    display: grid;
+    width: 0.85rem;
+    height: 0.85rem;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: white;
+    font-size: 0.55rem;
+    font-weight: 700;
+}
+
+.app-content {
+    max-width: 88rem;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
 
 @media (max-width: 640.98px) {
-    .top-row {
-        justify-content: space-between;
+    .app-sidebar {
+        width: 4.25rem;
+        flex-basis: 4.25rem;
     }
 
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        margin-left: 0;
-    }
-}
-
-@media (min-width: 641px) {
-    .page {
-        flex-direction: row;
+    .app-topbar {
+        padding: 0 1rem;
     }
 
-    .sidebar {
-        width: 250px;
-        height: 100vh;
-        position: sticky;
-        top: 0;
+    .connection-status {
+        display: none;
     }
 
-    .top-row {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-    }
-
-    .top-row.auth ::deep a:first-child {
-        flex: 1;
-        text-align: right;
-        width: 0;
-    }
-
-    .top-row, article {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
+    .app-content {
+        padding: 1rem;
     }
 }
-
-#blazor-error-ui {
-    color-scheme: light only;
-    background: lightyellow;
-    bottom: 0;
-    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
-    box-sizing: border-box;
-    display: none;
-    left: 0;
-    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
-    position: fixed;
-    width: 100%;
-    z-index: 1000;
-}
-
-    #blazor-error-ui .dismiss {
-        cursor: pointer;
-        position: absolute;
-        right: 0.75rem;
-        top: 0.5rem;
-    }
