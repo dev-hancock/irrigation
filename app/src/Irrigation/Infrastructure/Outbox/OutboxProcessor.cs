@@ -5,7 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Irrigation.Infrastructure.Outbox;
 
-public class OutboxProcessor(IrrigationDbContext db, IMediator mediator)
+public interface IOutboxProcessor
+{
+    Task Process(CancellationToken ct = default);
+}
+
+public class OutboxProcessor(IrrigationDbContext db, IMediator mediator) : IOutboxProcessor
 {
     public async Task Process(CancellationToken ct = default)
     {

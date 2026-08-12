@@ -1,6 +1,9 @@
 <Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Irrigation/Irrigation.csproj" />
+  </Folder>
+  <Folder Name="/test/" />
   <Project Path="docker-compose.dcproj">
     <Build />
   </Project>
-  <Project Path="src/Irrigation/Irrigation.csproj" />
 </Solution>

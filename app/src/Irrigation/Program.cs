@@ -1,10 +1,13 @@
 using Irrigation.Components;
+using Irrigation.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddInfrastructure();
 
 var app = builder.Build();
 

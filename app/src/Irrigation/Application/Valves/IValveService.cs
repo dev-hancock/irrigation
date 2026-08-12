@@ -1,6 +1,7 @@
 ﻿using ErrorOr;
+using Irrigation.Domain.Valves;
 
-namespace Irrigation.Domain.Valves;
+namespace Irrigation.Application.Valves;
 
 public interface IValveService
 {

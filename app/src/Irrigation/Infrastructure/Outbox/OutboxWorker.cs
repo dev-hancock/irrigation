@@ -8,7 +8,7 @@ public sealed class OutboxWorker(IServiceScopeFactory factory) : BackgroundServi
         {
             using var scope = factory.CreateScope();
 
-            var processor = scope.ServiceProvider.GetRequiredService<OutboxProcessor>();
+            var processor = scope.ServiceProvider.GetRequiredService<IOutboxProcessor>();
 
             await processor.Process(stoppingToken);
 

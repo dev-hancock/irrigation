@@ -3,4 +3,4 @@ services:
     image: ${DOCKER_REGISTRY-}irrigation
     build:
       context: .
-      dockerfile: Irrigation/Dockerfile
+      dockerfile: src/Irrigation/Dockerfile
