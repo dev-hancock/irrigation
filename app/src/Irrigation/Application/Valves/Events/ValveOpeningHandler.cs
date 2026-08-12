@@ -1,23 +1,22 @@
-﻿using ErrorOr;
-using Irrigation.Application.Common;
+﻿using Irrigation.Application.Common;
+using Irrigation.Application.Extensions;
 using Irrigation.Domain.Valves;
 using Mediator;
 
-namespace Irrigation.Application.Valves.Events
+namespace Irrigation.Application.Valves.Events;
+
+public class ValveOpeningHandler(IValveService valves, IEventBus events) : INotificationHandler<ValveOpening>
 {
-    public class ValveOpeningHandler(IValveService valves, IEventBus events) : INotificationHandler<ValveOpening>
+    public async ValueTask Handle(ValveOpening notification, CancellationToken cancellationToken)
     {
-        public async ValueTask Handle(ValveOpening notification, CancellationToken ct = default)
-        {
-            await valves.Open(notification.Id, ct);
+        var result = await valves.Open(notification.Id, cancellationToken);
 
-            await events.Publish(
-                new ValveStateChanged
-                {
-                    Id = notification.Id, 
-                    State = ValveState.Opening
-                }, ct);
+        result.ThrowIfError();
 
-        }
+        await events.Publish(
+            new ValveStateChanged
+            {
+                Id = notification.Id, State = ValveState.Opening
+            }, cancellationToken);
     }
 }

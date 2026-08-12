@@ -3,53 +3,50 @@ using Irrigation.Domain.Common;
 using Irrigation.Infrastructure.Outbox;
 using Microsoft.EntityFrameworkCore;
 
-namespace Irrigation.Infrastructure.Persistence
+namespace Irrigation.Infrastructure.Persistence;
+
+public class IrrigationDbContext(DbContextOptions<IrrigationDbContext> options) : DbContext(options)
 {
-   
+    public DbSet<OutboxMessage> Outbox { get; set; }
 
-    public class IrrigationDbContext(DbContextOptions<IrrigationDbContext> options) : DbContext(options)
+
+    public override async Task<int> SaveChangesAsync(
+        CancellationToken ct = default)
     {
-        public DbSet<OutboxMessage> Outbox { get; set; }
+        AddToOutbox();
 
+        return await base.SaveChangesAsync(ct);
+    }
 
-        public override async Task<int> SaveChangesAsync(
-            CancellationToken ct = default)
+    private void AddToOutbox()
+    {
+        var aggregates = ChangeTracker
+            .Entries<AggregateRoot>()
+            .Select(x => x.Entity)
+            .Where(x => x.Events.Count != 0)
+            .ToArray();
+
+        var notifications = aggregates
+            .SelectMany(x => x.Events)
+            .ToArray();
+
+        foreach (var @event in notifications)
         {
-            AddToOutbox();
-
-            return await base.SaveChangesAsync(ct);
+            Outbox.Add(
+                new OutboxMessage
+                {
+                    Id = Guid.NewGuid(),
+                    Type = @event.GetType().AssemblyQualifiedName!,
+                    Data = JsonSerializer.Serialize(
+                        @event,
+                        @event.GetType()),
+                    CreatedAt = DateTimeOffset.UtcNow
+                });
         }
 
-        private void AddToOutbox()
+        foreach (var aggregate in aggregates)
         {
-            var aggregates = ChangeTracker
-                .Entries<AggregateRoot>()
-                .Select(x => x.Entity)
-                .Where(x => x.Events.Count != 0)
-                .ToArray();
-
-            var notifications = aggregates
-                .SelectMany(x => x.Events)
-                .ToArray();
-
-            foreach (var @event in notifications)
-            {
-                Outbox.Add(
-                    new OutboxMessage
-                    {
-                        Id = Guid.NewGuid(),
-                        Type = @event.GetType().AssemblyQualifiedName!,
-                        Data = JsonSerializer.Serialize(
-                            @event,
-                            @event.GetType()),
-                        CreatedAt = DateTimeOffset.UtcNow
-                    });
-            }
-
-            foreach (var aggregate in aggregates)
-            {
-                aggregate.ClearEvents();
-            }
+            aggregate.ClearEvents();
         }
     }
 }

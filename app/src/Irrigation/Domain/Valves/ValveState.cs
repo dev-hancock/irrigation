@@ -1,10 +1,9 @@
-﻿namespace Irrigation.Domain.Valves
+﻿namespace Irrigation.Domain.Valves;
+
+public enum ValveState
 {
-    public enum ValveState
-    {
-        Opened,
-        Opening,
-        Closed,
-        Closing
-    }
+    Opened,
+    Opening,
+    Closed,
+    Closing
 }

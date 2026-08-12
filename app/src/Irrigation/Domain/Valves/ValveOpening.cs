@@ -1,9 +1,8 @@
 ﻿using Mediator;
 
-namespace Irrigation.Domain.Valves
+namespace Irrigation.Domain.Valves;
+
+public sealed record ValveOpening : INotification
 {
-    public sealed record ValveOpening : INotification
-    {
-        public ValveId Id { get; internal set; }
-    }
+    public ValveId Id { get; internal set; }
 }

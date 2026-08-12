@@ -1,80 +1,79 @@
 ﻿using Irrigation.Domain.Common;
 
-namespace Irrigation.Domain.Valves
+namespace Irrigation.Domain.Valves;
+
+public record struct ValveId(string Value);
+
+public class Valve : AggregateRoot
 {
-    public record struct ValveId(string Value);
+    public ValveState State { get; private set; }
 
-    public class Valve : AggregateRoot
+    public string Name { get; private set; }
+
+    public ValveId Id { get; private set; }
+
+    public void Open()
     {
-        public ValveState State { get; private set; }
-
-        public string Name { get; private set; }
-
-        public ValveId Id { get; private set; }
-
-        public void Open()
+        if (State is ValveState.Opened or ValveState.Opening)
         {
-            if (State is ValveState.Opened or ValveState.Opening)
-            {
-                return;
-            }
-
-            State = ValveState.Opening;
-
-            Raise(new ValveOpening
-            {
-                Id = Id
-            });
+            return;
         }
 
-        public void Update(string name)
+        State = ValveState.Opening;
+
+        Raise(new ValveOpening
         {
-            Name = name;
+            Id = Id
+        });
+    }
+
+    public void Update(string name)
+    {
+        Name = name;
+    }
+
+    public void Opened()
+    {
+        if (State is ValveState.Opened)
+        {
+            return;
         }
 
-        public void Opened()
+        State = ValveState.Opened;
+
+        Raise(new ValveOpened
         {
-            if (State is ValveState.Opened)
-            {
-                return;
-            }
+            Id = Id
+        });
+    }
 
-            State = ValveState.Opened;
-
-            Raise(new ValveOpened
-            {
-                Id = Id
-            });
+    public void Close()
+    {
+        if (State is ValveState.Closed or ValveState.Closing)
+        {
+            return;
         }
 
-        public void Close()
+        State = ValveState.Closing;
+
+        Raise(new ValveClosing
         {
-            if (State is ValveState.Closed or ValveState.Closing)
-            {
-                return;
-            }
+            Id = Id
+        });
+    }
 
-            State = ValveState.Closing;
-
-            Raise(new ValveClosing
-            {
-                Id = Id
-            });
+    public void Closed()
+    {
+        if (State is ValveState.Closed)
+        {
+            return;
         }
 
-        public void Closed()
+        State = ValveState.Closed;
+
+        Raise(new ValveClosed
         {
-            if (State is ValveState.Closed)
-            {
-                return;
-            }
-
-            State = ValveState.Closed;
-
-            Raise(new ValveClosed
-            {
-                Id = Id
-            });
-        }
+            Id = Id
+        });
     }
 }

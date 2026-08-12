@@ -1,52 +1,51 @@
-﻿using Irrigation.Domain.Common;
+﻿namespace Irrigation.Application.Common;
 
-namespace Irrigation.Application.Common
+public interface IEventBus
 {
-    public interface IEventBus
-    {
-        Task Publish<T>(T @event, CancellationToken ct = default);
+    Task Publish<T>(T @event, CancellationToken ct = default);
 
-        IDisposable Subscribe<T>(Func<T, CancellationToken, Task> handler);
+    IDisposable Subscribe<T>(Func<T, CancellationToken, Task> handler);
+}
+
+public class EventBus : IEventBus
+{
+    private readonly Dictionary<Type, List<Delegate>> _handlers = [];
+
+    public IDisposable Subscribe<T>(Func<T, CancellationToken, Task> handler)
+    {
+        var type = typeof(T);
+
+        if (!_handlers.TryGetValue(type, out var handlers))
+        {
+            handlers = [];
+            _handlers[type] = handlers;
+        }
+
+        handlers.Add(handler);
+
+        return new Subscription(() => handlers.Remove(handler));
     }
 
-    public class EventBus : IEventBus
+    public async Task Publish<T>(T @event, CancellationToken ct = default)
     {
-        private readonly Dictionary<Type, List<Delegate>> _handlers = [];
-
-        public IDisposable Subscribe<T>(Func<T, CancellationToken, Task> handler)
+        if (!_handlers.TryGetValue(typeof(T), out var handlers))
         {
-            var type = typeof(T);
-
-            if (!_handlers.TryGetValue(type, out var handlers))
-            {
-                handlers = [];
-                _handlers[type] = handlers;
-            }
-
-            handlers.Add(handler);
-
-            return new Subscription(() => handlers.Remove(handler));
+            return;
         }
 
-        public async Task Publish<T>(T @event, CancellationToken ct = default)
+        foreach (var handler in handlers.ToArray())
         {
-            if (!_handlers.TryGetValue(typeof(T), out var handlers))
-            {
-                return;
-            }
+            ct.ThrowIfCancellationRequested();
 
-            foreach (var handler in handlers.ToArray())
-            {
-                ct.ThrowIfCancellationRequested();
-
-                await ((Func<T, CancellationToken, Task>)handler)(@event, ct);
-            }
-        }
-
-        private sealed class Subscription(Action dispose) : IDisposable
-        {
-            public void Dispose() => dispose();
+            await ((Func<T, CancellationToken, Task>)handler)(@event, ct);
         }
     }
 
+    private sealed class Subscription(Action dispose) : IDisposable
+    {
+        public void Dispose()
+        {
+            dispose();
+        }
+    }
 }

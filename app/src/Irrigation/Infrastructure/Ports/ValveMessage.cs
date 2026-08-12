@@ -1,13 +1,12 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Irrigation.Infrastructure.Ports
-{
-    public sealed record ValveMessage
-    {
-        [JsonPropertyName("id")]
-        public required string Id { get; init; }
+namespace Irrigation.Infrastructure.Ports;
 
-        [JsonPropertyName("timestamp")]
-        public long Timestamp { get; init; }
-    }
+public sealed record ValveMessage
+{
+    [JsonPropertyName("id")]
+    public required string Id { get; init; }
+
+    [JsonPropertyName("timestamp")]
+    public long Timestamp { get; init; }
 }

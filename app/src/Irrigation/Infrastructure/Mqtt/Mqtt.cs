@@ -1,23 +1,21 @@
 ﻿using ErrorOr;
 
-namespace Irrigation.Infrastructure.Mqtt
+namespace Irrigation.Infrastructure.Mqtt;
+
+public interface IMqttClient
 {
-    public interface IMqttClient
-    {
-        Task Publish(string topic, object payload, bool retain = false, CancellationToken ct = default);
+    Task Publish(string topic, object payload, bool retain = false, CancellationToken ct = default);
 
-        Task Publish(string topic, CancellationToken ct = default);
-    }
+    Task Publish(string topic, CancellationToken ct = default);
+}
 
-    public class MqttConsumer
-    {
+public class MqttConsumer
+{
+}
 
-    }
+public interface IMessageHandler
+{
+    bool CanHandle(Message message);
 
-    public interface IMessageHandler
-    {
-        bool CanHandle(Message message);
-
-        Task<ErrorOr<Success>> Handle(Message message, CancellationToken ct);
-    }
+    Task<ErrorOr<Success>> Handle(Message message, CancellationToken ct);
 }
