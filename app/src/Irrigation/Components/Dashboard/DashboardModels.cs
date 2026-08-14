@@ -1,6 +1,6 @@
 namespace Irrigation.Components.Dashboard;
 
-public sealed record DashboardMetric(string Label, string Value, string Detail, string Icon, string Tone);
+public sealed record DashboardMetric(string Label, string Value, string Detail);
 
 public sealed record ValveSummary(int Number, string Name, string Zone, bool IsOpen, string StatusSince, string LastUpdated);
 

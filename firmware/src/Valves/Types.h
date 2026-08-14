@@ -12,6 +12,21 @@ namespace Irrigation::Valve
         Closed
     };
 
+    inline const char *toString(ValveStatus status)
+    {
+        switch (status)
+        {
+        case ValveStatus::Unknown:
+            return "unknown";
+        case ValveStatus::Open:
+            return "open";
+        case ValveStatus::Closed:
+            return "closed";
+        default:
+            return "invalid";
+        }
+    }
+
     using ValveId = String;
 
     using Duration = unsigned long;

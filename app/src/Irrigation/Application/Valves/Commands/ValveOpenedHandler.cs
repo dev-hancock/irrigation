@@ -1,4 +1,5 @@
 ﻿using ErrorOr;
+using Irrigation.Domain.Devices;
 using Irrigation.Domain.Repository;
 using Irrigation.Domain.Specifications;
 using Irrigation.Domain.Valves;
@@ -6,29 +7,54 @@ using Mediator;
 
 namespace Irrigation.Application.Valves.Commands;
 
-public sealed record ValveOpenedCommand : IRequest<ErrorOr<Success>>
+
+public sealed record UpdateValveCommand : IRequest<ErrorOr<Success>>
 {
     public required string Device { get; set; }
 
     public required string Id { get; set; }
+
+    public required string State { get; set; }
 }
 
-public class ValveOpenedHandler(IRepository<Valve> repo) : IRequestHandler<ValveOpenedCommand, ErrorOr<Success>>
+public class UpdateValveHandler(IRepository<Valve> valves, IRepository<Device> devices) : IRequestHandler<UpdateValveCommand, ErrorOr<Success>>
 {
-    public async ValueTask<ErrorOr<Success>> Handle(ValveOpenedCommand request, CancellationToken ct = default)
+    public async ValueTask<ErrorOr<Success>> Handle(UpdateValveCommand request, CancellationToken cancellationToken)
     {
-        var spec = new GetValveSpec(request.Device, request.Id);
+        var valve = await valves.FirstOrDefaultAsync(
+            new GetValveSpec(request.Device, request.Id),
+            cancellationToken);
 
-        var valve = await repo.FirstOrDefaultAsync(spec, ct);
+        if (!Enum.TryParse<ValveStatus>(request.State, true, out var status))
+        {
+            return Error.Failure("Valve.InvalidState", $"Invalid valve state '{request.State}'.");
+        }
 
         if (valve is null)
         {
-            return Error.NotFound("Valve.NotFound", $"Valve with device '{request.Device}' and id '{request.Id}' not found.");
+            var device = await devices.FirstOrDefaultAsync(
+                new GetDeviceSpec(request.Device),
+                cancellationToken);
+
+            if (device is null)
+            {
+                return Error.NotFound("Device.NotFound", $"Device with id '{request.Device}' not found.");
+            }
+
+            valve = Valve.Create(
+                device.Id,
+                new HardwareId(request.Id),
+                status
+            );
+
+            await valves.AddAsync(valve, cancellationToken);
+        }
+        else
+        {
+            valve.SetStatus(status);
         }
 
-        valve.Opened();
-
-        await repo.SaveChangesAsync(ct);
+        await valves.SaveChangesAsync(cancellationToken);
 
         return Result.Success;
     }

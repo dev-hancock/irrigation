@@ -1,13 +1,35 @@
-<section class="metric-card">
-    <div class="metric-card__icon metric-card__icon--@Metric.Tone"><i class="@Metric.Icon" aria-hidden="true"></i></div>
+<section class="flex min-h-32 items-center gap-6 rounded-xl border border-slate-200 bg-white px-6 py-5 shadow-sm">
+    <div class="flex size-16 shrink-0 items-center justify-center rounded-full @IconBackground @IconColor">
+        <i class="@($"{Icon} text-3xl")"
+           aria-hidden="true">
+        </i>
+    </div>
+
     <div>
-        <p class="metric-card__label">@Metric.Label</p>
-        <p class="metric-card__value">@Metric.Value</p>
-        <p class="metric-card__detail">@Metric.Detail</p>
+        <p class="text-sm font-medium text-slate-600">
+            @Metric.Label
+        </p>
+
+        <p class="mt-1 text-3xl font-semibold tracking-tight text-slate-950">
+            @Metric.Value
+        </p>
+
+        <p class="mt-1 text-sm text-slate-500">
+            @Metric.Detail
+        </p>
     </div>
 </section>
 
 @code {
     [Parameter, EditorRequired]
     public DashboardMetric Metric { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public string Icon { get; set; } = default!;
+
+    [Parameter]
+    public string IconBackground { get; set; } = "bg-slate-100";
+
+    [Parameter]
+    public string IconColor { get; set; } = "text-slate-500";
 }

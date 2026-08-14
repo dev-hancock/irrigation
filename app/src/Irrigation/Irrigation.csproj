@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Devices\" />
+    <Folder Include="Components\Valves\" />
     <Folder Include="Domain\Zones\" />
     <Folder Include="Api\" />
     <Folder Include="Web\" />

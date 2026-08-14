@@ -11,7 +11,7 @@ public sealed class ValveOpenedHandler(IEventBus events) : INotificationHandler<
         await events.Publish(
             new ValveStateChanged
             {
-                Id = notification.Id, State = ValveState.Opened
+                Id = notification.Id, Status = ValveStatus.Opened
             }, cancellationToken);
     }
 }

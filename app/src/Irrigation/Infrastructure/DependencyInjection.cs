@@ -4,7 +4,7 @@ using Irrigation.Domain.Repository;
 using Irrigation.Infrastructure.Mqtt;
 using Irrigation.Infrastructure.Outbox;
 using Irrigation.Infrastructure.Persistence;
-using Irrigation.Infrastructure.Ports;
+using Irrigation.Infrastructure.Ports.Valves;
 using Microsoft.EntityFrameworkCore;
 
 namespace Irrigation.Infrastructure

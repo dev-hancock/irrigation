@@ -1,25 +1,56 @@
 ﻿using Irrigation.Domain.Common;
+using Irrigation.Domain.Devices;
 
 namespace Irrigation.Domain.Valves;
 
-public record struct ValveId(string Value);
+public readonly record struct ValveId(Guid Value)
+{
+    public static ValveId New() => new(Guid.NewGuid());
+}
 
 public class Valve : AggregateRoot
 {
-    public ValveState State { get; private set; }
-
-    public string Name { get; private set; }
-
     public ValveId Id { get; private set; }
+
+    public DeviceId DeviceId { get; private set; }
+
+    public HardwareId HardwareId { get; private set; }
+
+    public string Name { get; private set; } = string.Empty;
+
+    public ValveStatus Status { get; private set; }
+    
+    private Valve()
+    {
+        // EF Core
+    }
+
+    private Valve(ValveId id, DeviceId deviceId, HardwareId hardwareId, ValveStatus status)
+    {
+        Id = id;
+        DeviceId = deviceId;
+        HardwareId = hardwareId;
+        Status = status;
+    }
+
+    public static Valve Create(DeviceId deviceId, HardwareId hardwareId, ValveStatus status)
+    {
+        return new Valve(
+            ValveId.New(),
+            deviceId,
+            hardwareId,
+            status
+        );
+    }
 
     public void Open()
     {
-        if (State is ValveState.Opened or ValveState.Opening)
+        if (Status is ValveStatus.Opened or ValveStatus.Opening)
         {
             return;
         }
 
-        State = ValveState.Opening;
+        Status = ValveStatus.Opening;
 
         Raise(new ValveOpening
         {
@@ -27,51 +58,48 @@ public class Valve : AggregateRoot
         });
     }
 
-    public void Update(string name)
+    public void Rename(string name)
     {
-        Name = name;
-    }
-
-    public void Opened()
-    {
-        if (State is ValveState.Opened)
+        if (name == Name)
         {
             return;
         }
 
-        State = ValveState.Opened;
+        Name = name;
 
-        Raise(new ValveOpened
+        Raise(new ValveRenamed
         {
-            Id = Id
+            Id = Id,
+            Name = name
+        });
+    }
+
+    public void SetStatus(ValveStatus status)
+    {
+        if (status == Status)
+        {
+            return;
+        }
+
+        Status = status;
+
+        Raise(new ValveStatusChanged
+        {
+            Id = Id,
+            Status = status
         });
     }
 
     public void Close()
     {
-        if (State is ValveState.Closed or ValveState.Closing)
+        if (Status is ValveStatus.Closed or ValveStatus.Closing)
         {
             return;
         }
 
-        State = ValveState.Closing;
+        Status = ValveStatus.Closing;
 
         Raise(new ValveClosing
-        {
-            Id = Id
-        });
-    }
-
-    public void Closed()
-    {
-        if (State is ValveState.Closed)
-        {
-            return;
-        }
-
-        State = ValveState.Closed;
-
-        Raise(new ValveClosed
         {
             Id = Id
         });

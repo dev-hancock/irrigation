@@ -59,10 +59,11 @@ namespace Irrigation::Valve
 
             JsonDocument event;
 
-            event["id"] = id;
-            event["timestamp"] = timestamp;
+            event["status"] = toString(ValveStatus::Closed);
 
-            _events.publish("valve/closed", event);
+            const String topic = "valve/" + id + "/state";
+
+            _events.publish(topic, event);
 
             return result;
         }

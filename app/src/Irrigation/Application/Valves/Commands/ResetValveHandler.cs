@@ -13,18 +13,18 @@ public sealed record ResetValveCommand : IRequest<ErrorOr<Success>>
 
 public sealed class ResetValveHandler(IRepository<Valve> repo) : IRequestHandler<ResetValveCommand, ErrorOr<Success>>
 {
-    public async ValueTask<ErrorOr<Success>> Handle(ResetValveCommand request, CancellationToken ct = default)
+    public async ValueTask<ErrorOr<Success>> Handle(ResetValveCommand request, CancellationToken cancellationToken)
     {
-        var spec = new GetValvesSpec(request.Device);
-
-        var valves = await repo.ListAsync(spec, ct);
+        var valves = await repo.ListAsync(
+            new GetValvesSpec(request.Device),
+            cancellationToken);
 
         foreach (var valve in valves)
         {
             valve.Close();
         }
 
-        await repo.SaveChangesAsync(ct);
+        await repo.SaveChangesAsync(cancellationToken);
 
         return Result.Success;
     }

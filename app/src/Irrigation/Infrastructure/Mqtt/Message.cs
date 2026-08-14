@@ -2,11 +2,11 @@
 
 public sealed record Message
 {
-    public string Device { get; set; }
+    public string Device => Topic.Device;
 
-    public string Topic { get; set; }
+    public required Topic Topic { get; init; }
 
-    public string Route { get; set; }
+    public required string Payload { get; init; }
 
-    public string Payload { get; set; }
+    public string this[int index] => Topic[index];
 }

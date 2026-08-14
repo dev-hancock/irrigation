@@ -15,11 +15,11 @@ public sealed record OpenValveCommand : IRequest<ErrorOr<Success>>
 
 public sealed class OpenValveHandler(IRepository<Valve> repo) : IRequestHandler<OpenValveCommand, ErrorOr<Success>>
 {
-    public async ValueTask<ErrorOr<Success>> Handle(OpenValveCommand request, CancellationToken ct = default)
+    public async ValueTask<ErrorOr<Success>> Handle(OpenValveCommand request, CancellationToken cancellationToken)
     {
         var spec = new GetValveSpec(request.Device, request.Id);
 
-        var valve = await repo.FirstOrDefaultAsync(spec, ct);
+        var valve = await repo.FirstOrDefaultAsync(spec, cancellationToken);
 
         if (valve is null)
         {
@@ -28,7 +28,7 @@ public sealed class OpenValveHandler(IRepository<Valve> repo) : IRequestHandler<
 
         valve.Open();
 
-        await repo.SaveChangesAsync(ct);
+        await repo.SaveChangesAsync(cancellationToken);
 
         return Result.Success;
     }

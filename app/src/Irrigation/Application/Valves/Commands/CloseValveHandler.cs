@@ -8,27 +8,27 @@ namespace Irrigation.Application.Valves.Commands;
 
 public sealed record CloseValveCommand : IRequest<ErrorOr<Success>>
 {
-    public string Device { get; set; }
+    public required string Device { get; set; }
 
-    public string Id { get; set; }
+    public required string Id { get; set; }
 }
 
 public sealed class CloseValveHandler(IRepository<Valve> repo) : IRequestHandler<CloseValveCommand, ErrorOr<Success>>
 {
-    public async ValueTask<ErrorOr<Success>> Handle(CloseValveCommand request, CancellationToken ct = default)
+    public async ValueTask<ErrorOr<Success>> Handle(CloseValveCommand request, CancellationToken cancellationToken)
     {
         var spec = new GetValveSpec(request.Device, request.Id);
 
-        var valve = await repo.FirstOrDefaultAsync(spec, ct);
+        var valve = await repo.FirstOrDefaultAsync(spec, cancellationToken);
 
         if (valve is null)
         {
             return Error.NotFound("Valve.NotFound", $"Valve with device '{request.Device}' and id '{request.Id}' not found.");
         }
 
-        valve.Open();
+        valve.Close();
 
-        await repo.SaveChangesAsync(ct);
+        await repo.SaveChangesAsync(cancellationToken);
 
         return Result.Success;
     }

@@ -47,10 +47,11 @@ namespace Irrigation::Valve
 
                 JsonDocument event;
 
-                event["id"] = entry.valve.id;
-                event["timestamp"] = entry.updated;
+                event["status"] = toString(ValveStatus::Closed);
 
-                result = _events.publish("valve/closed", event);
+                const String topic = "valve/" + entry.valve.id + "/state";
+
+                result = _events.publish(topic, event);
 
                 if (result.isFailure())
                 {

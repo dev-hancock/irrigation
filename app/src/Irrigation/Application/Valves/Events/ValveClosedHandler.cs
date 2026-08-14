@@ -11,7 +11,7 @@ public class ValveClosedHandler(IEventBus events) : INotificationHandler<ValveCl
         await events.Publish(
             new ValveStateChanged
             {
-                Id = notification.Id, State = ValveState.Closed
+                Id = notification.Id, Status = ValveStatus.Closed
             }, cancellationToken);
     }
 }

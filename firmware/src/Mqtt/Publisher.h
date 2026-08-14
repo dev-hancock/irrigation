@@ -35,14 +35,11 @@ namespace Irrigation::Mqtt
         }
 
     private:
-        String
-        prefix() const
+        [[nodiscard]]
+        String prefix() const
         {
-            return String("irrigation/") +
-                   Device::id() +
-                   "/" +
-                   "event" +
-                   "/";
+
+            return "irrigation/" + Device::id() + "/event/";
         }
 
         Client &_client;

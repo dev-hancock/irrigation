@@ -5,7 +5,12 @@ namespace Irrigation.Domain.Specifications;
 
 public class GetValveSpec : Specification<Valve>
 {
-    public GetValveSpec(string device, string id)
+    public GetValveSpec(string deviceId, string valveId)
+    {
+        // todo
+    }
+
+    public GetValveSpec(Guid valveId)
     {
         // todo
     }

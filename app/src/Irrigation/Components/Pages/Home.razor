@@ -15,12 +15,11 @@
         </div>
     </header>
 
-    <div class="metric-grid">
-        @foreach (var metric in Metrics)
-        {
-            <MetricCard Metric="metric" />
-        }
-    </div>
+    <MetricList
+        TotalValves="@TotalValves"
+        OpenValves="@OpenValves"
+        ActiveSchedules="@ActiveSchedules"
+        NextSchedule="@NextSchedule"></MetricList>
 
     <ValveTable Valves="Valves" />
 
@@ -31,13 +30,11 @@
 </section>
 
 @code {
-    private static IReadOnlyList<DashboardMetric> Metrics { get; } =
-    [
-        new("Total Valves", "4", "Configured", "ti ti-droplet", "blue"),
-        new("Open Valves", "1", "25%", "ti ti-circle-check", "green"),
-        new("Active Schedules", "2", "Running now", "ti ti-clock", "slate"),
-        new("Next Schedule", "18:30", "Garden Bed Watering", "ti ti-calendar-event", "amber")
-    ];
+
+    private DashboardMetric TotalValves { get; } = new("Total Valves", "4", "Configured");
+    private DashboardMetric OpenValves { get; } = new("Open Valves", "4", "25%");
+    private DashboardMetric ActiveSchedules { get; } = new("Active Schedules", "2", "Running now");
+    private DashboardMetric NextSchedule { get; } = new("Next Schedule", "18:30", "Garden Bed Watering");
 
     private static IReadOnlyList<ValveSummary> Valves { get; } =
     [
