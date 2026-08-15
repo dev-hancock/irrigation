@@ -1,4 +1,4 @@
-﻿namespace Irrigation.Infrastructure.Mqtt;
+﻿namespace Irrigation.Infrastructure.Mqtt.Abstraction;
 
 public sealed record Message
 {

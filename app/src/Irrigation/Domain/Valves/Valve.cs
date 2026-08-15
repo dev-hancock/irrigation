@@ -1,25 +1,10 @@
 ﻿using Irrigation.Domain.Common;
-using Irrigation.Domain.Devices;
+using Irrigation.Domain.Shared;
 
 namespace Irrigation.Domain.Valves;
 
-public readonly record struct ValveId(Guid Value)
-{
-    public static ValveId New() => new(Guid.NewGuid());
-}
-
 public class Valve : AggregateRoot
 {
-    public ValveId Id { get; private set; }
-
-    public DeviceId DeviceId { get; private set; }
-
-    public HardwareId HardwareId { get; private set; }
-
-    public string Name { get; private set; } = string.Empty;
-
-    public ValveStatus Status { get; private set; }
-    
     private Valve()
     {
         // EF Core
@@ -32,6 +17,16 @@ public class Valve : AggregateRoot
         HardwareId = hardwareId;
         Status = status;
     }
+
+    public ValveId Id { get; }
+
+    public DeviceId DeviceId { get; private set; }
+
+    public HardwareId HardwareId { get; private set; }
+
+    public string Name { get; private set; } = string.Empty;
+
+    public ValveStatus Status { get; private set; }
 
     public static Valve Create(DeviceId deviceId, HardwareId hardwareId, ValveStatus status)
     {
@@ -52,7 +47,7 @@ public class Valve : AggregateRoot
 
         Status = ValveStatus.Opening;
 
-        Raise(new ValveOpening
+        Raise(new ValveOpeningEvent
         {
             Id = Id
         });
@@ -67,10 +62,9 @@ public class Valve : AggregateRoot
 
         Name = name;
 
-        Raise(new ValveRenamed
+        Raise(new ValveRenamedEvent
         {
-            Id = Id,
-            Name = name
+            Id = Id, Name = name
         });
     }
 
@@ -83,10 +77,9 @@ public class Valve : AggregateRoot
 
         Status = status;
 
-        Raise(new ValveStatusChanged
+        Raise(new ValveStatusChangedEvent
         {
-            Id = Id,
-            Status = status
+            Id = Id, Status = status
         });
     }
 
@@ -99,7 +92,7 @@ public class Valve : AggregateRoot
 
         Status = ValveStatus.Closing;
 
-        Raise(new ValveClosing
+        Raise(new ValveClosingEvent
         {
             Id = Id
         });

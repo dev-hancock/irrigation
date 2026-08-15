@@ -63,7 +63,7 @@ namespace Irrigation::Valve
 
             const String topic = "valve/" + id + "/state";
 
-            _events.publish(topic, event);
+            _events.publish(topic, event, true);
 
             return result;
         }

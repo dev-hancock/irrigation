@@ -1,49 +1,50 @@
-﻿using ErrorOr;
-using Irrigation.Application.Valves.Commands;
-using Irrigation.Infrastructure.Mqtt;
-using Irrigation.Infrastructure.Ports.Valves;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using ErrorOr;
+using Irrigation.Application.Devices.Commands;
+using Irrigation.Infrastructure.Mqtt.Abstraction;
 using Mediator;
-using System.Text.Json;
 
-namespace Irrigation.Infrastructure.Ports.Devices
+namespace Irrigation.Infrastructure.Ports.Devices;
+
+public sealed class DeviceMessage
 {
-    public sealed class DeviceMessage
+    [JsonPropertyName("firmware")]
+    public string Firmware { get; set; }
+
+    [JsonPropertyName("model")]
+    public string Model { get; set; }
+
+    [JsonPropertyName("version")]
+    public string Version { get; set; }
+}
+
+public sealed class DeviceMessageHandler(IMediator mediator) : IMessageHandler
+{
+    public bool CanHandle(Message message)
     {
-        public string Id { get; set; }
-
-        public string Firmware { get; set; }
-
-        public string Model { get; set; }
-
-        public string Version { get; set; }
+        // irrigation/{device}/event/device
+        return message.Topic.Length == 4
+               && message[2] == "event"
+               && message[3] == "device";
     }
 
-    public sealed class DeviceMessageHandler(IMediator mediator) : IMessageHandler
+    public async Task<ErrorOr<Success>> Handle(Message message, CancellationToken ct)
     {
-        public bool CanHandle(Message message)
+        var payload = JsonSerializer.Deserialize<DeviceMessage>(message.Payload);
+
+        if (payload is null)
         {
-            // irrigation/{device}/event/device
-            return message.Topic.Length == 4
-                   && message[2] == "event"
-                   && message[3] == "device";
+            return Result.Success;
         }
 
-        public async Task<ErrorOr<Success>> Handle(Message message, CancellationToken ct)
-        {
-            var payload = JsonSerializer.Deserialize<DeviceMessage>(message.Payload);
-
-            if (payload is null)
+        return await mediator.Send(
+            new UpdateDeviceCommand
             {
-                return Result.Success;
-            }
-
-            return await mediator.Send(
-                new UpdateDeviceCommand
-                {
-                    Id = payload.Id,
-                    Device = message.Device
-                }, ct);
-        }
+                Id = message.Device, 
+                Firmware = payload.Firmware, 
+                Model = payload.Model, 
+                Version = payload.Version
+            }, ct);
     }
-
 }

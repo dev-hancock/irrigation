@@ -3,35 +3,41 @@
     <MetricCard Metric="@TotalValves"
                 Icon="ti ti-droplet"
                 IconBackground="bg-blue-100"
-                IconColor="text-blue-500" />
+                IconColor="text-blue-500"/>
 
     <MetricCard Metric="@OpenValves"
                 Icon="ti ti-circle-check"
                 IconBackground="bg-emerald-100"
-                IconColor="text-emerald-600" />
+                IconColor="text-emerald-600"/>
 
     <MetricCard Metric="@ActiveSchedules"
                 Icon="ti ti-clock"
                 IconBackground="bg-slate-100"
-                IconColor="text-slate-600" />
+                IconColor="text-slate-600"/>
 
     <MetricCard Metric="@NextSchedule"
                 Icon="ti ti-calendar-event"
                 IconBackground="bg-amber-100"
-                IconColor="text-amber-500" />
+                IconColor="text-amber-500"/>
 
 </div>
 
 @code {
-    [Parameter, EditorRequired]
+
+    [Parameter]
+    [EditorRequired]
     public DashboardMetric TotalValves { get; set; } = default!;
 
-    [Parameter, EditorRequired]
+    [Parameter]
+    [EditorRequired]
     public DashboardMetric OpenValves { get; set; } = default!;
 
-    [Parameter, EditorRequired]
+    [Parameter]
+    [EditorRequired]
     public DashboardMetric ActiveSchedules { get; set; } = default!;
 
-    [Parameter, EditorRequired]
+    [Parameter]
+    [EditorRequired]
     public DashboardMetric NextSchedule { get; set; } = default!;
+
 }

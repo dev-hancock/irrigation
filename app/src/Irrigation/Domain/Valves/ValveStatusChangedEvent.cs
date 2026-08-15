@@ -1,8 +1,9 @@
-﻿using Mediator;
+﻿using Irrigation.Domain.Shared;
+using Mediator;
 
 namespace Irrigation.Domain.Valves;
 
-public sealed record ValveStatusChanged : INotification
+public sealed record ValveStatusChangedEvent : INotification
 {
     public ValveId Id { get; init; }
 

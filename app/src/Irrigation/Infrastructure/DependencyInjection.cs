@@ -2,66 +2,85 @@
 using Irrigation.Application.Valves;
 using Irrigation.Domain.Repository;
 using Irrigation.Infrastructure.Mqtt;
+using Irrigation.Infrastructure.Mqtt.Abstraction;
 using Irrigation.Infrastructure.Outbox;
 using Irrigation.Infrastructure.Persistence;
+using Irrigation.Infrastructure.Ports.Devices;
 using Irrigation.Infrastructure.Ports.Valves;
 using Microsoft.EntityFrameworkCore;
+using MQTTnet;
 
-namespace Irrigation.Infrastructure
+namespace Irrigation.Infrastructure;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+        services.AddDb();
+        services.AddOutbox();
+        services.AddMqtt();
+
+        services.AddValves();
+        services.AddDevices();
+
+        services.AddMediator(opt => opt.ServiceLifetime = ServiceLifetime.Scoped);
+
+        services.AddScoped<IEventBus, EventBus>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddMqtt(this IServiceCollection services)
+    {
+        services.AddSingleton<IMqttClient>(_ =>
         {
-            services.AddDb();
-            services.AddOutbox();
-            services.AddMqtt();
+            var factory = new MqttClientFactory();
 
-            services.AddValves();
+            return factory.CreateMqttClient();
+        });
 
-            services.AddMediator(opt => opt.ServiceLifetime = ServiceLifetime.Scoped);
+        services.AddScoped<IMqttConnection, MqttConnection>();
+        services.AddScoped<IMqttConsumer, MqttConsumer>();
+        services.AddScoped<IMqttPublisher, MqttPublisher>();
 
-            services.AddScoped<IEventBus, EventBus>();
+        services.AddOptions<MqttOptions>().BindConfiguration(MqttOptions.Section);
 
-            return services;
-        }
+        services.AddHostedService<MqttService>();
 
-        private static IServiceCollection AddMqtt(this IServiceCollection services)
-        {
-            services.AddSingleton<IMqttClient, MqttClient>();
+        return services;
+    }
 
-            services.AddScoped<IMqttConsumer, MqttConsumer>();
+    private static IServiceCollection AddDb(this IServiceCollection services)
+    {
+        services.AddDbContext<IrrigationDbContext>(opt => opt.UseInMemoryDatabase("Irrigation"));
 
-            services.AddHostedService<MqttService>();
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-            return services;
-        }
+        return services;
+    }
 
-        private static IServiceCollection AddDb(this IServiceCollection services)
-        {
-            services.AddDbContext<IrrigationDbContext>(opt => opt.UseInMemoryDatabase("Irrigation"));
+    private static IServiceCollection AddOutbox(this IServiceCollection services)
+    {
+        services.AddScoped<IOutboxProcessor, OutboxProcessor>();
 
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddHostedService<OutboxWorker>();
 
-            return services;
-        }
+        return services;
+    }
 
-        private static IServiceCollection AddOutbox(this IServiceCollection services)
-        {
-            services.AddScoped<IOutboxProcessor, OutboxProcessor>();
+    private static IServiceCollection AddValves(this IServiceCollection services)
+    {
+        services.AddScoped<IMessageHandler, ValveMessageHandler>();
 
-            services.AddHostedService<OutboxWorker>();
+        services.AddScoped<IValveService, ValveService>();
 
-            return services;
-        }
+        return services;
+    }
 
-        private static IServiceCollection AddValves(this IServiceCollection services)
-        {
-            services.AddScoped<IMessageHandler, ValveMessageHandler>();
+    private static IServiceCollection AddDevices(this IServiceCollection services)
+    {
+        services.AddScoped<IMessageHandler, DeviceMessageHandler>();
 
-            services.AddScoped<IValveService, ValveService>();
-
-            return services;
-        }
+        return services;
     }
 }

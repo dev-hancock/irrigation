@@ -1,12 +1,12 @@
 ﻿using ErrorOr;
 using Irrigation.Domain.Devices;
 using Irrigation.Domain.Repository;
+using Irrigation.Domain.Shared;
 using Irrigation.Domain.Specifications;
 using Irrigation.Domain.Valves;
 using Mediator;
 
 namespace Irrigation.Application.Valves.Commands;
-
 
 public sealed record UpdateValveCommand : IRequest<ErrorOr<Success>>
 {
@@ -14,26 +14,27 @@ public sealed record UpdateValveCommand : IRequest<ErrorOr<Success>>
 
     public required string Id { get; set; }
 
-    public required string State { get; set; }
+    public required string Status { get; set; }
 }
 
-public class UpdateValveHandler(IRepository<Valve> valves, IRepository<Device> devices) : IRequestHandler<UpdateValveCommand, ErrorOr<Success>>
+public class UpdateValveHandler(IRepository<Valve> valves, IRepository<Device> devices)
+    : IRequestHandler<UpdateValveCommand, ErrorOr<Success>>
 {
     public async ValueTask<ErrorOr<Success>> Handle(UpdateValveCommand request, CancellationToken cancellationToken)
     {
         var valve = await valves.FirstOrDefaultAsync(
-            new GetValveSpec(request.Device, request.Id),
+            new GetValveSpec(HardwareId.From(request.Id)),
             cancellationToken);
 
-        if (!Enum.TryParse<ValveStatus>(request.State, true, out var status))
+        if (!Enum.TryParse<ValveStatus>(request.Status, true, out var status))
         {
-            return Error.Failure("Valve.InvalidState", $"Invalid valve state '{request.State}'.");
+            return Error.Failure("Valve.InvalidState", $"Invalid valve status '{request.Status}'.");
         }
 
         if (valve is null)
         {
             var device = await devices.FirstOrDefaultAsync(
-                new GetDeviceSpec(request.Device),
+                new GetDeviceSpec(HardwareId.From(request.Device)),
                 cancellationToken);
 
             if (device is null)
@@ -43,7 +44,7 @@ public class UpdateValveHandler(IRepository<Valve> valves, IRepository<Device> d
 
             valve = Valve.Create(
                 device.Id,
-                new HardwareId(request.Id),
+                HardwareId.From(request.Id),
                 status
             );
 

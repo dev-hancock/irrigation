@@ -8,15 +8,34 @@
     </header>
     <div class="valve-table__scroll">
         <table class="valve-table">
-            <thead><tr><th>Valve</th><th>Status</th><th>Last Updated</th><th>Manual Control</th></tr></thead>
+            <thead>
+            <tr>
+                <th>Valve</th><th>Status</th><th>Last Updated</th><th>Manual Control</th>
+            </tr>
+            </thead>
             <tbody>
             @foreach (var valve in Valves)
             {
                 <tr>
-                    <td><div class="valve-table__identity"><span class="valve-table__number">@valve.Number</span><span><strong>@valve.Name</strong><small>@valve.Zone</small></span></div></td>
-                    <td><span class="status-pill @(valve.IsOpen ? "status-pill--open" : "status-pill--closed")">@(valve.IsOpen ? "Open" : "Closed")</span><small>Since @valve.StatusSince</small></td>
-                    <td><span>@valve.LastUpdated.Split('|')[0]</span><small>@valve.LastUpdated.Split('|')[1]</small></td>
-                    <td><div class="valve-table__controls"><button class="dashboard-button dashboard-button--success-outline" type="button"><i class="ti ti-player-play" aria-hidden="true"></i>Open</button><button class="dashboard-button dashboard-button--danger-outline" type="button"><i class="ti ti-player-stop" aria-hidden="true"></i>Close</button></div></td>
+                    <td>
+                        <div class="valve-table__identity">
+                            <span class="valve-table__number">@valve.Number</span>
+                            <span>
+                                <strong>@valve.Name</strong><small>@valve.Zone</small>
+                            </span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="status-pill @(valve.IsOpen ? "status-pill--open" : "status-pill--closed")">@(valve.IsOpen ? "Open" : "Closed")</span><small>Since @valve.StatusSince</small>
+                    </td>
+                    <td>
+                        <span>@valve.LastUpdated.Split('|')[0]</span><small>@valve.LastUpdated.Split('|')[1]</small>
+                    </td>
+                    <td>
+                        <div class="valve-table__controls">
+                            <button class="dashboard-button dashboard-button--success-outline" type="button"><i class="ti ti-player-play" aria-hidden="true"></i>Open</button><button class="dashboard-button dashboard-button--danger-outline" type="button"><i class="ti ti-player-stop" aria-hidden="true"></i>Close</button>
+                        </div>
+                    </td>
                 </tr>
             }
             </tbody>
@@ -25,6 +44,9 @@
 </section>
 
 @code {
-    [Parameter, EditorRequired]
+
+    [Parameter]
+    [EditorRequired]
     public IReadOnlyList<ValveSummary> Valves { get; set; } = [];
+
 }

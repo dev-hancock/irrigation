@@ -1,23 +1,24 @@
 ﻿using ErrorOr;
 using Irrigation.Domain.Repository;
+using Irrigation.Domain.Shared;
 using Irrigation.Domain.Specifications;
 using Irrigation.Domain.Valves;
 using Mediator;
 
 namespace Irrigation.Application.Valves.Commands;
 
-public sealed record ValveRenameCommand : IRequest<ErrorOr<Success>>
+public sealed record RenameValveCommand : IRequest<ErrorOr<Success>>
 {
     public required Guid Id { get; set; }
 
     public required string Name { get; set; }
 }
 
-public class ValveRenameHandler(IRepository<Valve> repo) : IRequestHandler<ValveRenameCommand, ErrorOr<Success>>
+public class RenameValveHandler(IRepository<Valve> repo) : IRequestHandler<RenameValveCommand, ErrorOr<Success>>
 {
-    public async ValueTask<ErrorOr<Success>> Handle(ValveRenameCommand request, CancellationToken cancellationToken)
+    public async ValueTask<ErrorOr<Success>> Handle(RenameValveCommand request, CancellationToken cancellationToken)
     {
-        var spec = new GetValveSpec(request.Id);
+        var spec = new GetValveSpec(ValveId.From(request.Id));
 
         var valve = await repo.FirstOrDefaultAsync(spec, cancellationToken);
 

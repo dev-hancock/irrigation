@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using ErrorOr;
 using Irrigation.Application.Valves.Commands;
-using Irrigation.Infrastructure.Mqtt;
+using Irrigation.Infrastructure.Mqtt.Abstraction;
 using Mediator;
 
 namespace Irrigation.Infrastructure.Ports.Valves;
@@ -32,8 +32,8 @@ public sealed class ValveMessageHandler(IMediator mediator) : IMessageHandler
             new UpdateValveCommand
             {
                 Id = id, 
-                Device = message.Device,
-                State = payload.State
+                Device = message.Device, 
+                Status = payload.Status
             }, ct);
     }
 }

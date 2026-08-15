@@ -1,4 +1,5 @@
-﻿using Irrigation.Domain.Valves;
+﻿using Irrigation.Domain.Shared;
+using Irrigation.Domain.Valves;
 
 namespace Irrigation.Application.Valves;
 

@@ -1,14 +1,21 @@
 <section class="dashboard-panel compact-panel">
-    <header class="dashboard-panel__header"><h2>Recent Activity</h2><a class="panel-link" href="logs">View All</a></header>
+    <header class="dashboard-panel__header">
+        <h2>Recent Activity</h2><a class="panel-link" href="logs">View All</a>
+    </header>
     <div class="activity-list">
         @foreach (var activity in Activities)
         {
-            <div class="activity-item"><span class="activity-item__indicator @(activity.IsSuccess ? "activity-item__indicator--success" : "activity-item__indicator--danger")" aria-hidden="true"></span><time>@activity.Time</time><span>@activity.Description</span><small>@activity.Source</small></div>
+            <div class="activity-item">
+                <span class="activity-item__indicator @(activity.IsSuccess ? "activity-item__indicator--success" : "activity-item__indicator--danger")" aria-hidden="true"></span><time>@activity.Time</time><span>@activity.Description</span><small>@activity.Source</small>
+            </div>
         }
     </div>
 </section>
 
 @code {
-    [Parameter, EditorRequired]
+
+    [Parameter]
+    [EditorRequired]
     public IReadOnlyList<ActivitySummary> Activities { get; set; } = [];
+
 }

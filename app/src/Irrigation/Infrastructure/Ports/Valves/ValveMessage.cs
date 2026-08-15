@@ -4,6 +4,6 @@ namespace Irrigation.Infrastructure.Ports.Valves;
 
 public sealed record ValveMessage
 {
-    [JsonPropertyName("state")]
-    public required string State { get; init; }
+    [JsonPropertyName("status")]
+    public required string Status { get; init; }
 }

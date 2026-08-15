@@ -20,9 +20,9 @@ namespace Irrigation::Device
 
             JsonDocument payload;
 
-            payload["id"] = info.id;
             payload["firmware"] = info.firmware;
             payload["model"] = info.model;
+            payload["version"] = info.version;
 
             Result result = _events.publish("device", payload, true);
 

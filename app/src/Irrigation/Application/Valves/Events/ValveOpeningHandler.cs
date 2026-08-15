@@ -5,9 +5,9 @@ using Mediator;
 
 namespace Irrigation.Application.Valves.Events;
 
-public class ValveOpeningHandler(IValveService valves, IEventBus events) : INotificationHandler<ValveOpening>
+public class ValveOpeningHandler(IValveService valves, IEventBus events) : INotificationHandler<ValveOpeningEvent>
 {
-    public async ValueTask Handle(ValveOpening notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(ValveOpeningEvent notification, CancellationToken cancellationToken)
     {
         var result = await valves.Open(notification.Id, cancellationToken);
 

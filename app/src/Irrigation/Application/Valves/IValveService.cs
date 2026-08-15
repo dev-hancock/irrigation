@@ -1,5 +1,5 @@
 ﻿using ErrorOr;
-using Irrigation.Domain.Valves;
+using Irrigation.Domain.Shared;
 
 namespace Irrigation.Application.Valves;
 

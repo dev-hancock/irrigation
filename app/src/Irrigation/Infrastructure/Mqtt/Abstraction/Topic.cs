@@ -1,4 +1,4 @@
-﻿namespace Irrigation.Infrastructure.Mqtt;
+﻿namespace Irrigation.Infrastructure.Mqtt.Abstraction;
 
 public sealed record Topic
 {
@@ -15,9 +15,12 @@ public sealed record Topic
 
     public string Device => _parts[1];
 
-    public int Length => _parts.Length - 3;
+    public int Length => _parts.Length;
 
-    public string this[int index] => _parts[index + 3];
+    public string this[int index] => _parts[index];
 
-    public override string ToString() => Value;
+    public override string ToString()
+    {
+        return Value;
+    }
 }

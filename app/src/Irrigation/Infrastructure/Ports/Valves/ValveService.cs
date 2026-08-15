@@ -1,15 +1,15 @@
 ﻿using ErrorOr;
 using Irrigation.Application.Valves;
-using Irrigation.Domain.Valves;
-using Irrigation.Infrastructure.Mqtt;
+using Irrigation.Domain.Shared;
+using Irrigation.Infrastructure.Mqtt.Abstraction;
 
 namespace Irrigation.Infrastructure.Ports.Valves;
 
-public class ValveService(IMqttClient client) : IValveService
+public class ValveService(IMqttPublisher client) : IValveService
 {
     public async Task<ErrorOr<Success>> Open(ValveId id, CancellationToken ct = default)
     {
-        var message = new 
+        var message = new
         {
             id = id.ToString()
         };

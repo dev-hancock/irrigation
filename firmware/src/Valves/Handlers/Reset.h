@@ -51,7 +51,7 @@ namespace Irrigation::Valve
 
                 const String topic = "valve/" + entry.valve.id + "/state";
 
-                result = _events.publish(topic, event);
+                _events.publish(topic, event, true);
 
                 if (result.isFailure())
                 {

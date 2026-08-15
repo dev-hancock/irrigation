@@ -1,47 +1,35 @@
 ﻿using ErrorOr;
-using Irrigation.Domain.Devices;
+using Irrigation.Application.Valves.Requests.Contracts;
 using Irrigation.Domain.Repository;
+using Irrigation.Domain.Shared;
 using Irrigation.Domain.Specifications;
 using Irrigation.Domain.Valves;
 using Mediator;
 
-namespace Irrigation.Application.Valves.Requests
+namespace Irrigation.Application.Valves.Requests;
+
+public class GetValvesRequest : IRequest<ErrorOr<ValveDto[]>>
 {
-    public class ValveDto
+    public DeviceId? Device { get; set; }
+}
+
+public class GetValvesHandler(IRepository<Valve> repo) : IRequestHandler<GetValvesRequest, ErrorOr<ValveDto[]>>
+{
+    public async ValueTask<ErrorOr<ValveDto[]>> Handle(GetValvesRequest request, CancellationToken cancellationToken)
     {
-        public Guid Id { get; set; }
+        var spec = new GetValvesSpec(request.Device);
 
-        public string HardwareId { get; set; }
+        var valves = await repo.ListAsync(spec, cancellationToken);
 
-        public Guid DeviceId { get; set; }
-
-        public string Status { get; set; }
-
-        public string Name { get; set; }
-
-        public DateTimeOffset Updated { get; set; }
-    }
-
-    public class GetValvesRequest : IRequest<ErrorOr<ValveDto[]>>
-    {
-        public DeviceId? Device { get; set; }
-    }
-    
-    public class GetValvesHandler(IRepository<Valve> repo) : IRequestHandler<GetValvesRequest, ErrorOr<ValveDto[]>>
-    {
-        public async ValueTask<ErrorOr<ValveDto[]>> Handle(GetValvesRequest request, CancellationToken cancellationToken)
-        {
-            var spec = new GetValvesSpec(request.Device);
-
-            var valves = await repo.ListAsync(spec, cancellationToken);
-
-            return valves
-                .Select(x => new ValveDto
-                {
-                    Id = x.Id.Value,
-                    Name = x.Name
-                })
-                .ToArray();
-        }
+        return valves
+            .Select(x => new ValveDto
+            {
+                Id = x.Id.Value, Name = x.Name
+                //HardwareId = x.HardwareId,
+                //DeviceId = x.DeviceId,
+                //Status = x.Status,
+                //Updated = x.Updated
+            })
+            .ToArray();
     }
 }

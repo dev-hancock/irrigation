@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
 using Irrigation.Domain.Common;
+using Irrigation.Domain.Devices;
+using Irrigation.Domain.Valves;
 using Irrigation.Infrastructure.Outbox;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,8 +9,11 @@ namespace Irrigation.Infrastructure.Persistence;
 
 public class IrrigationDbContext(DbContextOptions<IrrigationDbContext> options) : DbContext(options)
 {
-    public DbSet<OutboxMessage> Outbox { get; set; }
+    public DbSet<Valve> Valves { get; set; }
 
+    public DbSet<Device> Devices { get; set; }
+
+    public DbSet<OutboxMessage> Outbox { get; set; }
 
     public override async Task<int> SaveChangesAsync(
         CancellationToken ct = default)
@@ -16,6 +21,14 @@ public class IrrigationDbContext(DbContextOptions<IrrigationDbContext> options) 
         AddToOutbox();
 
         return await base.SaveChangesAsync(ct);
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.ApplyConfigurationsFromAssembly(
+            typeof(IrrigationDbContext).Assembly);
     }
 
     private void AddToOutbox()
