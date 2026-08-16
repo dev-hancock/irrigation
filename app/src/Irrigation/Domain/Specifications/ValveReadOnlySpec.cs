@@ -4,14 +4,10 @@ using Irrigation.Domain.Valves;
 
 namespace Irrigation.Domain.Specifications;
 
-public class GetValveSpec : Specification<Valve>
+public class ValveReadOnlySpec : Specification<Valve>
 {
-    public GetValveSpec(ValveId id)
+    public ValveReadOnlySpec(ValveId id)
     {
-        // todo
-    }
-
-    public GetValveSpec(HardwareId id)
-    {
+        Query.AsNoTracking().Where(x => x.Id == id);
     }
 }

@@ -2,7 +2,7 @@
 
 public enum ValveStatus
 {
-    Opened,
+    Open,
     Opening,
     Closed,
     Closing

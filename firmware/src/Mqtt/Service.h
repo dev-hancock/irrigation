@@ -12,10 +12,10 @@
 
 namespace Irrigation::Mqtt
 {
-    class Module
+    class Service
     {
     public:
-        Module(
+        Service(
             Router &router,
             WiFi::Client &wifi)
             : _client(wifi.socket()),
@@ -48,7 +48,7 @@ namespace Irrigation::Mqtt
                 return result;
             }
 
-            Serial.println("MQTT module initialized");
+            Serial.println("MQTT initialized");
 
             return _consumer.begin();
         }

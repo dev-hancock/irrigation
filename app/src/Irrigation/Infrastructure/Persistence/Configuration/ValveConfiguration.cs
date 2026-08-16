@@ -26,11 +26,7 @@ public sealed class ValveConfiguration : IEntityTypeConfiguration<Valve>
                 value => new DeviceId(value))
             .IsRequired();
 
-        builder.Property(x => x.HardwareId)
-            .HasConversion(
-                id => id.Value,
-                value => new HardwareId(value))
-            .HasMaxLength(100)
+        builder.Property(x => x.Index)
             .IsRequired();
 
         builder.Property(x => x.Name)
@@ -50,7 +46,7 @@ public sealed class ValveConfiguration : IEntityTypeConfiguration<Valve>
 
         builder.HasIndex(x => new
             {
-                x.DeviceId, x.HardwareId
+                x.DeviceId, HardwareId = x.Index
             })
             .IsUnique();
 

@@ -1,11 +1,12 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using ErrorOr;
+﻿using ErrorOr;
 using Irrigation.Application.Devices.Commands;
 using Irrigation.Infrastructure.Mqtt.Abstraction;
 using Mediator;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
-namespace Irrigation.Infrastructure.Ports.Devices;
+namespace Irrigation.Infrastructure.Devices;
 
 public sealed class DeviceMessage
 {
@@ -19,14 +20,14 @@ public sealed class DeviceMessage
     public string Version { get; set; }
 }
 
-public sealed class DeviceMessageHandler(IMediator mediator) : IMessageHandler
+public sealed partial class DeviceMessageHandler(IMediator mediator) : IMessageHandler
 {
+    [GeneratedRegex("/event/device$")]
+    private static partial Regex Pattern();
+
     public bool CanHandle(Message message)
     {
-        // irrigation/{device}/event/device
-        return message.Topic.Length == 4
-               && message[2] == "event"
-               && message[3] == "device";
+        return Pattern().IsMatch(message.Topic.Value);
     }
 
     public async Task<ErrorOr<Success>> Handle(Message message, CancellationToken ct)
@@ -41,10 +42,7 @@ public sealed class DeviceMessageHandler(IMediator mediator) : IMessageHandler
         return await mediator.Send(
             new UpdateDeviceCommand
             {
-                Id = message.Device, 
-                Firmware = payload.Firmware, 
-                Model = payload.Model, 
-                Version = payload.Version
+                Id = message.Device, Firmware = payload.Firmware, Model = payload.Model, Version = payload.Version
             }, ct);
     }
 }

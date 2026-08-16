@@ -5,5 +5,9 @@ namespace Irrigation.Domain.Valves;
 
 public sealed record ValveOpeningEvent : INotification
 {
-    public ValveId Id { get; internal set; }
+    public required ValveId Id { get; init; }
+
+    public required int Index { get; init; }
+
+    public required DeviceId DeviceId { get; init; }
 }

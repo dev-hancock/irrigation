@@ -48,6 +48,15 @@ public class Device : AggregateRoot
             version);
     }
 
+    public void Offline()
+    {
+    }
+
+    public void Heartbeat()
+    {
+        UpdatedAt = DateTimeOffset.UtcNow;
+    }
+
     public void Update(string firmware, string model, string version)
     {
         var hasChanged =

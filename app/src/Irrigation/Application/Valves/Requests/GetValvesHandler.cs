@@ -17,19 +17,12 @@ public class GetValvesHandler(IRepository<Valve> repo) : IRequestHandler<GetValv
 {
     public async ValueTask<ErrorOr<ValveDto[]>> Handle(GetValvesRequest request, CancellationToken cancellationToken)
     {
-        var spec = new GetValvesSpec(request.Device);
-
-        var valves = await repo.ListAsync(spec, cancellationToken);
+        var valves = await repo.ListAsync(
+            new ValvesReadOnlySpec(DeviceId.From(request.Device)),
+            cancellationToken);
 
         return valves
-            .Select(x => new ValveDto
-            {
-                Id = x.Id.Value, Name = x.Name
-                //HardwareId = x.HardwareId,
-                //DeviceId = x.DeviceId,
-                //Status = x.Status,
-                //Updated = x.Updated
-            })
+            .Select(ValveDto.From)
             .ToArray();
     }
 }

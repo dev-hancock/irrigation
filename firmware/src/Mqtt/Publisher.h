@@ -24,7 +24,6 @@ namespace Irrigation::Mqtt
             const JsonDocument &payload,
             const bool retain = false) override
         {
-
             Message message{
                 .topic = prefix() + topic,
                 .payload = ""};
@@ -38,8 +37,7 @@ namespace Irrigation::Mqtt
         [[nodiscard]]
         String prefix() const
         {
-
-            return "irrigation/" + Device::id() + "/event/";
+            return "irrigation/" + Device::Id() + "/event/";
         }
 
         Client &_client;

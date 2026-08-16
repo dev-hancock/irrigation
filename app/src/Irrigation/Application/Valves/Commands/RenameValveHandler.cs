@@ -18,7 +18,7 @@ public class RenameValveHandler(IRepository<Valve> repo) : IRequestHandler<Renam
 {
     public async ValueTask<ErrorOr<Success>> Handle(RenameValveCommand request, CancellationToken cancellationToken)
     {
-        var spec = new GetValveSpec(ValveId.From(request.Id));
+        var spec = new ValveSpec(ValveId.From(request.Id));
 
         var valve = await repo.FirstOrDefaultAsync(spec, cancellationToken);
 

@@ -17,7 +17,7 @@ public sealed class ResetValveHandler(IRepository<Valve> repo) : IRequestHandler
     public async ValueTask<ErrorOr<Success>> Handle(ResetValveCommand request, CancellationToken cancellationToken)
     {
         var valves = await repo.ListAsync(
-            new GetValvesSpec(DeviceId.From(request.Device)),
+            new ValvesSpec(DeviceId.From(request.Device)),
             cancellationToken);
 
         foreach (var valve in valves)

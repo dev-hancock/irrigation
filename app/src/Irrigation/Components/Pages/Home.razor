@@ -1,5 +1,16 @@
 ﻿@page "/"
+@rendermode InteractiveServer
+@using Irrigation.Application.Common
+@using Irrigation.Application.Valves
+@using Irrigation.Application.Valves.Commands
+@using Irrigation.Application.Valves.Requests
+@using Irrigation.Application.Valves.Requests.Contracts
 @using Irrigation.Components.Dashboard
+@using Mediator
+@implements IDisposable
+
+@inject IMediator Mediator
+@inject IEventBus Events
 
 <PageTitle>Irrigation Dashboard</PageTitle>
 
@@ -22,7 +33,10 @@
         NextSchedule="@NextSchedule">
     </MetricList>
 
-    <ValveTable Valves="Valves"/>
+    <ValveTable
+        Valves="@Valves"
+        OnOpen="@OpenValve"
+        OnClose="@CloseValve"/>
 
     <div class="dashboard-page__lower-grid">
         <ActiveSchedules Schedules="Schedules"/>
@@ -32,18 +46,16 @@
 
 @code {
 
+    private string _error;
+
     private DashboardMetric TotalValves { get; } = new("Total Valves", "4", "Configured");
     private DashboardMetric OpenValves { get; } = new("Open Valves", "4", "25%");
     private DashboardMetric ActiveSchedules { get; } = new("Active Schedules", "2", "Running now");
     private DashboardMetric NextSchedule { get; } = new("Next Schedule", "18:30", "Garden Bed Watering");
 
-    private static IReadOnlyList<ValveSummary> Valves { get; } =
-    [
-        new(1, "Front Lawn", "Zone 1", true, "10:14:23", "10:14:23|May 12, 2025"),
-        new(2, "Garden Beds", "Zone 2", false, "09:45:10", "09:45:10|May 12, 2025"),
-        new(3, "Greenhouse", "Zone 3", false, "08:30:05", "08:30:05|May 12, 2025"),
-        new(4, "Backyard Trees", "Zone 4", false, "07:15:42", "07:15:42|May 12, 2025")
-    ];
+    private readonly List<ValveSummary> _valves = [];
+
+    public IReadOnlyList<ValveSummary> Valves => _valves.AsReadOnly();
 
     private static IReadOnlyList<ScheduleSummary> Schedules { get; } =
     [
@@ -58,5 +70,100 @@
         new("08:30:05", "Valve 3 closed", "Schedule", false),
         new("07:15:42", "Valve 4 closed", "Schedule", false)
     ];
+
+    private IDisposable? _token;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _token = Events.Subscribe<ValveChanged>(async (x, t) =>
+        {
+            var result = await Mediator.Send(new GetValveRequest
+            {
+                Id = x.Id
+            }, t);
+
+            if (result.IsError)
+            {
+                return;
+            }
+
+            CreateOrUpdate(result.Value);
+
+            await InvokeAsync(StateHasChanged);
+        });
+
+        var result = await Mediator.Send(new GetValvesRequest());
+
+
+        if (result.IsError)
+        {
+            _error = result.FirstError.Description;
+        }
+
+        foreach (var valve in result.Value)
+        {
+            CreateOrUpdate(valve);
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void CreateOrUpdate(ValveDto dto)
+    {
+        var existing = _valves.FirstOrDefault(x => x.Id == dto.Id);
+
+        var updated = new ValveSummary(
+            dto.Id,
+            dto.Index,
+            dto.Name,
+            "Zone",
+            dto.Status,
+            dto.Updated);
+
+        if (existing is null)
+        {
+            _valves.Add(updated);
+        }
+        else
+        {
+            var index = _valves.IndexOf(existing);
+
+            _valves[index] = updated;
+        }
+    }
+
+    private async Task OpenValve(Guid id)
+    {
+        var result = await Mediator.Send(
+            new OpenValveCommand
+            {
+                Id = id
+            });
+
+        if (result.IsError)
+        {
+            _error = result.FirstError.Description;
+        }
+    }
+
+    private async Task CloseValve(Guid id)
+    {
+        var result = await Mediator.Send(
+            new CloseValveCommand
+            {
+                Id = id
+            });
+
+        if (result.IsError)
+        {
+            _error = result.FirstError.Description;
+        }
+    }
+
+    public void Dispose()
+    {
+        _token?.Dispose();
+        _token = null;
+    }
 
 }

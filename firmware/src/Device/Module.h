@@ -2,27 +2,28 @@
 
 #include "Common/Api.h"
 
-#include "Device/Types.h"
+#include "Device/Definition.h"
 
 namespace Irrigation::Device
 {
     class Module
     {
     public:
-        Module(IEvents &events)
-            : _events(events)
+        Module(
+            const Device::Definition &device,
+            IEvents &events)
+            : _events(events),
+              _device(device)
         {
         }
 
         Result begin()
         {
-            const Info info = Info::get();
-
             JsonDocument payload;
 
-            payload["firmware"] = info.firmware;
-            payload["model"] = info.model;
-            payload["version"] = info.version;
+            payload["firmware"] = _device.firmware;
+            payload["model"] = _device.model;
+            payload["version"] = _device.version;
 
             Result result = _events.publish("device", payload, true);
 
@@ -31,12 +32,13 @@ namespace Irrigation::Device
                 return result;
             }
 
-            Serial.println("Device module initialized");
+            Serial.println("Device initialized");
 
             return Result::Success();
         }
 
     private:
         IEvents &_events;
+        const Device::Definition &_device;
     };
 }

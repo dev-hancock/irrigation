@@ -11,7 +11,7 @@
 
 namespace Irrigation::WiFi
 {
-    class Module
+    class Service
     {
     public:
         Result begin()

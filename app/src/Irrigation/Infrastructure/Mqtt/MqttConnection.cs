@@ -11,15 +11,15 @@ public class MqttConnection : IMqttConnection
 {
     private readonly IMqttClient _client;
 
-    private readonly IMqttConsumer _consumer;
+    private readonly IServiceScopeFactory _factory;
 
     private readonly MqttOptions _options;
 
-    public MqttConnection(IMqttClient client, IMqttConsumer consumer, IOptions<MqttOptions> options)
+    public MqttConnection(IMqttClient client, IServiceScopeFactory factory, IOptions<MqttOptions> options)
     {
         _client = client;
         _options = options.Value;
-        _consumer = consumer;
+        _factory = factory;
 
         _client.ApplicationMessageReceivedAsync += OnMessageReceived;
     }
@@ -93,7 +93,11 @@ public class MqttConnection : IMqttConnection
             Topic = new Topic(arg.ApplicationMessage.Topic), Payload = payload
         };
 
-        var result = await _consumer.Consume(message);
+        using var scope = _factory.CreateScope();
+
+        var consumer = scope.ServiceProvider.GetRequiredService<IMqttConsumer>();
+
+        var result = await consumer.Consume(message);
 
         result.ThrowIfError();
     }

@@ -75,7 +75,7 @@ namespace Irrigation::Mqtt
         [[nodiscard]]
         String prefix() const
         {
-            return "irrigation/" + Device::id() + "/command/";
+            return "irrigation/" + Device::Id() + "/command/";
         }
 
         Client &_client;

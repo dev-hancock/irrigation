@@ -23,7 +23,7 @@ public class UpdateDeviceHandler(IRepository<Device> repo) : IRequestHandler<Upd
     public async ValueTask<ErrorOr<Success>> Handle(UpdateDeviceCommand request, CancellationToken cancellationToken)
     {
         var device = await repo.FirstOrDefaultAsync(
-            new GetDeviceSpec(HardwareId.From(request.Id)),
+            new DeviceSpec(HardwareId.From(request.Id)),
             cancellationToken);
 
         if (device is null)

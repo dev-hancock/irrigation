@@ -1,0 +1,65 @@
+<tr class="border-b border-slate-200 last:border-b-0">
+    <td class="px-3 py-3 align-middle sm:px-4">
+        <div class="flex items-center gap-3">
+            <span class="grid size-8 place-items-center rounded-full bg-blue-600 text-sm font-bold text-white">@Valve.Index</span>
+            <span>
+                <strong class="block text-sm font-semibold text-slate-900">@Valve.Name</strong>
+                <small class="block text-xs text-slate-500">@Valve.Zone</small>
+            </span>
+        </div>
+    </td>
+    <td class="px-3 py-3 align-middle sm:px-4">
+        <span class="@StatusClass">@Valve.Status</span>
+        <small class="block text-xs text-slate-500">Since @Valve.StatusSince</small>
+    </td>
+    <td class="px-3 py-3 align-middle sm:px-4">
+        <span class="block text-sm text-slate-700">@Valve.UpdatedTime</span>
+        <small class="block text-xs text-slate-500">@Valve.UpdatedDate</small>
+    </td>
+    <td class="px-3 py-3 align-middle sm:px-4">
+        <div class="flex gap-2">
+            <button class="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-md border border-emerald-300 bg-white px-3 py-1.5 text-xs font-bold text-emerald-700 transition hover:bg-emerald-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+                    type="button"
+                    disabled="@Valve.IsOpen"
+                    @onclick="OpenAsync">
+                <i class="ti ti-player-play" aria-hidden="true"></i>Open
+            </button>
+            <button class="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-md border border-red-300 bg-white px-3 py-1.5 text-xs font-bold text-red-700 transition hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+                    type="button"
+                    disabled="@(!Valve.IsOpen)"
+                    @onclick="CloseAsync">
+                <i class="ti ti-player-stop" aria-hidden="true"></i>Close
+            </button>
+        </div>
+    </td>
+</tr>
+
+@code {
+
+    [Parameter]
+    [EditorRequired]
+    public ValveSummary Valve { get; set; } = default!;
+
+    [Parameter]
+    [EditorRequired]
+    public EventCallback<Guid> OnOpen { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public EventCallback<Guid> OnClose { get; set; }
+
+    private Task OpenAsync()
+    {
+        return OnOpen.InvokeAsync(Valve.Id);
+    }
+
+    private Task CloseAsync()
+    {
+        return OnClose.InvokeAsync(Valve.Id);
+    }
+
+    private string StatusClass => Valve.IsOpen
+        ? "mb-1 inline-block rounded bg-emerald-100 px-1.5 py-0.5 text-[0.625rem] font-bold uppercase text-emerald-700"
+        : "mb-1 inline-block rounded bg-slate-100 px-1.5 py-0.5 text-[0.625rem] font-bold uppercase text-slate-700";
+
+}

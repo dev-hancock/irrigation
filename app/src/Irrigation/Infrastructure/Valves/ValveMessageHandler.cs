@@ -1,20 +1,20 @@
-﻿using System.Text.Json;
-using ErrorOr;
+﻿using ErrorOr;
 using Irrigation.Application.Valves.Commands;
 using Irrigation.Infrastructure.Mqtt.Abstraction;
 using Mediator;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
-namespace Irrigation.Infrastructure.Ports.Valves;
+namespace Irrigation.Infrastructure.Valves;
 
-public sealed class ValveMessageHandler(IMediator mediator) : IMessageHandler
+public sealed partial class ValveMessageHandler(IMediator mediator) : IMessageHandler
 {
+    [GeneratedRegex(@"/event/valve/\d+/state$")]
+    private static partial Regex Pattern();
+
     public bool CanHandle(Message message)
     {
-        // irrigation/{device}/event/valve/{id}/state
-        return message.Topic.Length == 6
-               && message[2] == "event"
-               && message[3] == "valve"
-               && message[5] == "state";
+        return Pattern().IsMatch(message.Topic.Value);
     }
 
     public async Task<ErrorOr<Success>> Handle(Message message, CancellationToken ct)
@@ -26,14 +26,10 @@ public sealed class ValveMessageHandler(IMediator mediator) : IMessageHandler
             return Result.Success;
         }
 
-        var id = message.Topic[4];
-
         return await mediator.Send(
             new UpdateValveCommand
             {
-                Id = id, 
-                Device = message.Device, 
-                Status = payload.Status
+                Index = payload.Id, Device = message.Device, Status = payload.Status
             }, ct);
     }
 }

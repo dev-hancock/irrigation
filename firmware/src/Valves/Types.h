@@ -3,6 +3,10 @@
 #include <Arduino.h>
 #include <vector>
 
+#include "Common/Types.h"
+
+#include "Valves/Definition.h"
+
 namespace Irrigation::Valve
 {
     enum class ValveStatus
@@ -11,6 +15,8 @@ namespace Irrigation::Valve
         Open,
         Closed
     };
+
+    using Valve = Definition;
 
     inline const char *toString(ValveStatus status)
     {
@@ -26,22 +32,6 @@ namespace Irrigation::Valve
             return "invalid";
         }
     }
-
-    using ValveId = String;
-
-    using Duration = unsigned long;
-
-    using Pin = uint8_t;
-
-    struct Valve
-    {
-        ValveId id;
-        Pin in1Pin;
-        Pin in2Pin;
-        Duration durationMs;
-    };
-
-    using Timestamp = unsigned long;
 
     struct ValveEntry
     {

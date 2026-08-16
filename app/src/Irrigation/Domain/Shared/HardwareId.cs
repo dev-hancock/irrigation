@@ -6,4 +6,9 @@ public readonly record struct HardwareId(string Value)
     {
         return new HardwareId(id);
     }
+
+    public static implicit operator string(HardwareId id)
+    {
+        return id.Value;
+    }
 }

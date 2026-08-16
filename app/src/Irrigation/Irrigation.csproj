@@ -11,6 +11,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Compile Remove="Application\Devices\NewFolder\**" />
+		<Compile Remove="Infrastructure\NewFolder\**" />
+		<Content Remove="Application\Devices\NewFolder\**" />
+		<Content Remove="Infrastructure\NewFolder\**" />
+		<EmbeddedResource Remove="Application\Devices\NewFolder\**" />
+		<EmbeddedResource Remove="Infrastructure\NewFolder\**" />
+		<None Remove="Application\Devices\NewFolder\**" />
+		<None Remove="Infrastructure\NewFolder\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Ardalis.Specification" Version="9.3.1" />
 		<PackageReference Include="Ardalis.Specification.EntityFrameworkCore" Version="9.3.1" />
 		<PackageReference Include="ErrorOr" Version="2.1.1" />
@@ -30,13 +41,6 @@
 		<PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="10.0.1" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Components\Valves\" />
-		<Folder Include="Domain\Zones\" />
-		<Folder Include="Api\" />
-		<Folder Include="Web\" />
 	</ItemGroup>
 
 </Project>

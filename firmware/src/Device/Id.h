@@ -1,11 +1,12 @@
 #pragma once
 
 #include <Arduino.h>
+#include <vector>
 
 namespace Irrigation::Device
 {
     [[nodiscard]]
-    inline String id()
+    inline String Id()
     {
         char buffer[13];
 

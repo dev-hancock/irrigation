@@ -8,6 +8,7 @@
 #include "Valves/Handlers/Open.h"
 #include "Valves/Handlers/Close.h"
 #include "Valves/Handlers/Reset.h"
+#include "Valves/Topics.h"
 
 namespace Irrigation::Valve
 {
@@ -26,12 +27,14 @@ namespace Irrigation::Valve
 
         bool canHandle(const String &topic) override
         {
-            return topic.startsWith("valve/");
+            return topic == Topics::OpenValve ||
+                   topic == Topics::CloseValve ||
+                   topic == Topics::ResetValve;
         }
 
         Result handle(const Message &message) override
         {
-            if (message.topic == "valve/reset")
+            if (message.topic == Topics::ResetValve)
             {
                 return _reset.handle();
             }
@@ -43,17 +46,17 @@ namespace Irrigation::Valve
                 return Result::Failure("Invalid JSON");
             }
 
-            if (message.topic == "valve/open")
+            if (message.topic == Topics::OpenValve)
             {
                 return _open.handle(request);
             }
 
-            if (message.topic == "valve/close")
+            if (message.topic == Topics::CloseValve)
             {
                 return _close.handle(request);
             }
 
-            return Result::Failure("Unknown valve command");
+            return Result::Failure("Unknown command");
         }
 
     private:

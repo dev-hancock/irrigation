@@ -8,6 +8,7 @@
 #include "Valves/State.h"
 #include "Valves/Driver.h"
 #include "Valves/Errors.h"
+#include "Valves/Topics.h"
 
 namespace Irrigation::Valve
 {
@@ -26,12 +27,12 @@ namespace Irrigation::Valve
 
         Result handle(const JsonDocument &request)
         {
-            const ValveId id = request["id"] | "";
-
-            if (id.isEmpty())
+            if (!request["id"].is<ValveId>())
             {
                 return Errors::NotFound();
             }
+
+            const ValveId id = request["id"].as<ValveId>();
 
             ValveEntry *entry = _state.find(id);
 
@@ -59,10 +60,11 @@ namespace Irrigation::Valve
 
             JsonDocument event;
 
+            event["id"] = id;
             event["status"] = toString(ValveStatus::Closed);
-
-            const String topic = "valve/" + id + "/state";
-
+            
+            const String topic = Topics::ValveState(id);
+            
             _events.publish(topic, event, true);
 
             return result;

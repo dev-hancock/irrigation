@@ -8,6 +8,7 @@
 #include "Valves/State.h"
 #include "Valves/Driver.h"
 #include "Valves/Errors.h"
+#include "Valves/Topics.h"
 
 namespace Irrigation::Valve
 {
@@ -45,11 +46,14 @@ namespace Irrigation::Valve
                 entry.status = ValveStatus::Closed;
                 entry.updated = timestamp;
 
+                ValveId id = entry.valve.id;
+
                 JsonDocument event;
 
+                event["id"] = id;
                 event["status"] = toString(ValveStatus::Closed);
 
-                const String topic = "valve/" + entry.valve.id + "/state";
+                const String topic = Topics::ValveState(id);
 
                 _events.publish(topic, event, true);
 

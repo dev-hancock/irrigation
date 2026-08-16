@@ -4,33 +4,41 @@
 
 #include <cstdlib>
 
-#include "Common/State.h"
+#include "State.h"
 #include "Common/Api.h"
 
-#include "WiFi/Module.h"
+#include "WiFi/Service.h"
+#include "Mqtt/Service.h"
 
-#include "Mqtt/Module.h"
+#include "Device/Module.h"
 
 #include "Valves/Module.h"
-#include "Device/Module.h"
+#include "Health/Module.h"
 
 namespace Irrigation
 {
 	class App
 	{
 	public:
-		App()
+		App(const Device::Definition &device)
 			: _state(),
 			  _router(),
 			  _wifi(),
 			  _mqtt(
 				  _router,
 				  _wifi.client()),
+			  _device(
+				  device,
+				  _mqtt.events()),
 			  _valves(
 				  _state.valves,
+				  device.valves,
 				  _router,
 				  _mqtt.events()),
-			  _device(_mqtt.events())
+			  _health(
+				  device,
+				  _router,
+				  _mqtt.events())
 		{
 		}
 
@@ -58,6 +66,12 @@ namespace Irrigation
 				return result;
 			}
 
+			result = _health.begin();
+			if (result.isFailure())
+			{
+				return result;
+			}
+
 			result = _valves.begin();
 			if (result.isFailure())
 			{
@@ -74,18 +88,17 @@ namespace Irrigation
 			_wifi.update();
 
 			_mqtt.update();
-
-			// _valves.update();
 		}
 
 	private:
 		State _state;
 		Router _router;
 
-		WiFi::Module _wifi;
-		Mqtt::Module _mqtt;
+		WiFi::Service _wifi;
+		Mqtt::Service _mqtt;
 
 		Device::Module _device;
+		Health::Module _health;
 		Valve::Module _valves;
 	};
 

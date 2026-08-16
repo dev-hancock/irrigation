@@ -1,12 +1,14 @@
 ﻿using Irrigation.Application.Common;
+using Irrigation.Application.Health;
 using Irrigation.Application.Valves;
 using Irrigation.Domain.Repository;
+using Irrigation.Infrastructure.Devices;
+using Irrigation.Infrastructure.Health;
 using Irrigation.Infrastructure.Mqtt;
 using Irrigation.Infrastructure.Mqtt.Abstraction;
 using Irrigation.Infrastructure.Outbox;
 using Irrigation.Infrastructure.Persistence;
-using Irrigation.Infrastructure.Ports.Devices;
-using Irrigation.Infrastructure.Ports.Valves;
+using Irrigation.Infrastructure.Valves;
 using Microsoft.EntityFrameworkCore;
 using MQTTnet;
 
@@ -22,10 +24,11 @@ public static class DependencyInjection
 
         services.AddValves();
         services.AddDevices();
+        services.AddHealth();
 
         services.AddMediator(opt => opt.ServiceLifetime = ServiceLifetime.Scoped);
 
-        services.AddScoped<IEventBus, EventBus>();
+        services.AddSingleton<IEventBus, EventBus>();
 
         return services;
     }
@@ -55,6 +58,7 @@ public static class DependencyInjection
         services.AddDbContext<IrrigationDbContext>(opt => opt.UseInMemoryDatabase("Irrigation"));
 
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }
@@ -80,6 +84,19 @@ public static class DependencyInjection
     private static IServiceCollection AddDevices(this IServiceCollection services)
     {
         services.AddScoped<IMessageHandler, DeviceMessageHandler>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddHealth(this IServiceCollection services)
+    {
+        services.AddScoped<IMessageHandler, HealthMessageHandler>();
+
+        services.AddOptions<HealthOptions>().BindConfiguration(HealthOptions.Section);
+
+        services.AddScoped<IHealthService, HealthService>();
+
+        services.AddHostedService<HealthWorker>();
 
         return services;
     }

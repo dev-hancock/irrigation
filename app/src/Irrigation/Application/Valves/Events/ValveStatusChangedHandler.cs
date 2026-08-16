@@ -9,9 +9,9 @@ public class ValveStatusChangedHandler(IEventBus events) : INotificationHandler<
     public async ValueTask Handle(ValveStatusChangedEvent notification, CancellationToken cancellationToken)
     {
         await events.Publish(
-            new ValveStateChanged
+            new ValveChanged
             {
-                Id = notification.Id, Status = notification.Status
+                Id = notification.Id
             }, cancellationToken);
     }
 }

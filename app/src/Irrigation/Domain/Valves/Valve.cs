@@ -10,37 +10,45 @@ public class Valve : AggregateRoot
         // EF Core
     }
 
-    private Valve(ValveId id, DeviceId deviceId, HardwareId hardwareId, ValveStatus status)
+    private Valve(ValveId id, DeviceId deviceId, int index, ValveStatus status, DateTimeOffset createdAt, DateTimeOffset updatedAt)
     {
         Id = id;
         DeviceId = deviceId;
-        HardwareId = hardwareId;
+        Index = index;
         Status = status;
+        CreatedAt = createdAt;
+        UpdatedAt = updatedAt;
     }
 
     public ValveId Id { get; }
 
-    public DeviceId DeviceId { get; private set; }
+    public DeviceId DeviceId { get; }
 
-    public HardwareId HardwareId { get; private set; }
+    public int Index { get; }
 
     public string Name { get; private set; } = string.Empty;
 
     public ValveStatus Status { get; private set; }
 
-    public static Valve Create(DeviceId deviceId, HardwareId hardwareId, ValveStatus status)
+    public DateTimeOffset UpdatedAt { get; private set; }
+
+    public DateTimeOffset CreatedAt { get; private set; }
+
+    public static Valve Create(DeviceId deviceId, int index, ValveStatus status)
     {
         return new Valve(
             ValveId.New(),
             deviceId,
-            hardwareId,
-            status
+            index,
+            status,
+            DateTimeOffset.UtcNow,
+            DateTimeOffset.UtcNow
         );
     }
 
     public void Open()
     {
-        if (Status is ValveStatus.Opened or ValveStatus.Opening)
+        if (Status is ValveStatus.Open or ValveStatus.Opening)
         {
             return;
         }
@@ -49,8 +57,10 @@ public class Valve : AggregateRoot
 
         Raise(new ValveOpeningEvent
         {
-            Id = Id
+            Id = Id, Index = Index, DeviceId = DeviceId
         });
+
+        UpdatedAt = DateTimeOffset.UtcNow;
     }
 
     public void Rename(string name)
@@ -66,6 +76,8 @@ public class Valve : AggregateRoot
         {
             Id = Id, Name = name
         });
+
+        UpdatedAt = DateTimeOffset.UtcNow;
     }
 
     public void SetStatus(ValveStatus status)
@@ -81,6 +93,8 @@ public class Valve : AggregateRoot
         {
             Id = Id, Status = status
         });
+
+        UpdatedAt = DateTimeOffset.UtcNow;
     }
 
     public void Close()
@@ -94,7 +108,9 @@ public class Valve : AggregateRoot
 
         Raise(new ValveClosingEvent
         {
-            Id = Id
+            Id = Id, Index = Index, DeviceId = DeviceId
         });
+
+        UpdatedAt = DateTimeOffset.UtcNow;
     }
 }

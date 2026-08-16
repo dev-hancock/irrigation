@@ -22,6 +22,7 @@ namespace Irrigation::Valve
     public:
         Module(
             State &state,
+            const std::vector<Valve> &valves,
             Router &router,
             IEvents &events)
             : _state(state),
@@ -29,38 +30,17 @@ namespace Irrigation::Valve
               _open(events, _state, _driver),
               _close(events, _state, _driver),
               _reset(events, _state, _driver),
-              _api(_open, _close, _reset)
+              _api(_open, _close, _reset),
+              _valves(valves)
         {
             router.add(_api);
         }
 
         Result begin()
         {
-            const std::vector<Valve> valves = {
-                Valve{
-                    .id = "1",
-                    .in1Pin = 18,
-                    .in2Pin = 19,
-                    .durationMs = 20},
-                Valve{
-                    .id = "2",
-                    .in1Pin = 21,
-                    .in2Pin = 22,
-                    .durationMs = 20},
-                Valve{
-                    .id = "3",
-                    .in1Pin = 23,
-                    .in2Pin = 25,
-                    .durationMs = 20},
-                Valve{
-                    .id = "4",
-                    .in1Pin = 26,
-                    .in2Pin = 27,
-                    .durationMs = 20}};
+            _state = State(_valves);
 
-            _state = State(valves);
-
-            for (const Valve init : valves)
+            for (const Valve init : _valves)
             {
                 _driver.begin(init);
             }
@@ -72,17 +52,16 @@ namespace Irrigation::Valve
                 return result;
             }
 
-            Serial.println("Valves module initialized");
+            Serial.println("Valves initialized");
 
             return Result::Success();
         }
 
     private:
         State &_state;
+        const std::vector<Valve> &_valves;
 
         Driver _driver;
-
-        unsigned long _timestamp = 0;
 
         OpenHandler _open;
         CloseHandler _close;
