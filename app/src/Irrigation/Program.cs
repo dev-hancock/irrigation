@@ -1,5 +1,5 @@
-using Irrigation.Components;
 using Irrigation.Infrastructure;
+using Irrigation.Web.Components;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

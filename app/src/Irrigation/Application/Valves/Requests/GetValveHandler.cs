@@ -23,7 +23,7 @@ public class GetValveHandler(IRepository<Valve> repo) : IRequestHandler<GetValve
 
         if (valve is null)
         {
-            return Error.NotFound("Valve.NotFound", $"Valve with id '{request.Id}' not found.");
+            return Error.NotFound("Valve.NotFound", $"Valve with id '{request.Id.Value}' not found.");
         }
 
         return ValveDto.From(valve);

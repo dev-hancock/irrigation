@@ -20,7 +20,7 @@ public class ValveOpeningHandler(IRepository<Device> devices, IValveService valv
 
         if (device is null)
         {
-            throw new InvalidOperationException($"Device '{notification.DeviceId}' not found.");
+            throw new InvalidOperationException($"Device '{notification.DeviceId.Value}' not found.");
         }
 
         var result = await valves.Open(notification.Index, device.HardwareId, cancellationToken);

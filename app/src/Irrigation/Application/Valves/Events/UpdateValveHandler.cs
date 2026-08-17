@@ -1,13 +1,12 @@
-﻿using ErrorOr;
-using Irrigation.Domain.Repository;
+﻿using Irrigation.Domain.Repository;
 using Irrigation.Domain.Shared;
 using Irrigation.Domain.Specifications;
 using Irrigation.Domain.Valves;
 using Mediator;
 
-namespace Irrigation.Application.Valves.Commands;
+namespace Irrigation.Application.Valves.Events;
 
-public sealed record UpdateValveCommand : IRequest<ErrorOr<Success>>
+public sealed record UpdateValveEvent : INotification
 {
     public required HardwareId Device { get; set; }
 
@@ -16,43 +15,40 @@ public sealed record UpdateValveCommand : IRequest<ErrorOr<Success>>
     public required ValveStatus Status { get; set; }
 }
 
-public class UpdateValveHandler(IUnitOfWork uow, ILogger<UpdateValveHandler> logger)
-    : IRequestHandler<UpdateValveCommand, ErrorOr<Success>>
+public class UpdateValveHandler(IUnitOfWork uow, ILogger<UpdateValveHandler> logger) : INotificationHandler<UpdateValveEvent>
 {
-    public async ValueTask<ErrorOr<Success>> Handle(UpdateValveCommand request, CancellationToken cancellationToken)
+    public async ValueTask Handle(UpdateValveEvent notification, CancellationToken cancellationToken)
     {
-        var spec = new DeviceSpec(request.Device);
+        var spec = new DeviceSpec(notification.Device);
 
         var device = await uow.Devices.FirstOrDefaultAsync(spec, cancellationToken);
 
         if (device is null)
         {
-            return Error.NotFound("Device.NotFound", $"Device with id '{request.Device}' not found.");
+            throw new InvalidOperationException($"Device '{notification.Device.Value}' not found.");
         }
 
         var valve = await uow.Valves.FirstOrDefaultAsync(
-            new ValveSpec(request.Index, device.Id),
+            new ValveSpec(notification.Index, device.Id),
             cancellationToken);
 
         if (valve is null)
         {
             valve = Valve.Create(
                 device.Id,
-                request.Index,
-                request.Status
+                notification.Index,
+                notification.Status
             );
 
             await uow.Valves.AddAsync(valve, cancellationToken);
         }
         else
         {
-            valve.SetStatus(request.Status);
+            valve.SetStatus(notification.Status);
         }
 
         logger.LogInformation($"Valve '{device.HardwareId.Value}:{valve.Index}' is {valve.Status}");
 
         await uow.SaveChangesAsync(cancellationToken);
-
-        return Result.Success;
     }
 }

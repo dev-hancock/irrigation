@@ -23,7 +23,7 @@ public sealed class OpenValveHandler(IRepository<Valve> valves, ILogger<OpenValv
 
         if (valve is null)
         {
-            return Error.NotFound("Valve.NotFound", $"Valve with id '{request.Id}' not found.");
+            return Error.NotFound("Valve.NotFound", $"Valve with id '{request.Id.Value}' not found.");
         }
 
         valve.Open();

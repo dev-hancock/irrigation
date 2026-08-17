@@ -22,7 +22,7 @@ public class HeartbeatReceivedHandler(IRepository<Device> repo) : INotificationH
 
         if (device is null)
         {
-            throw new InvalidOperationException($"Device '{notification.Id}' not found.");
+            throw new InvalidOperationException($"Device '{notification.Id.Value}' not found.");
         }
 
         device.Heartbeat();

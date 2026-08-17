@@ -1,9 +1,9 @@
 ﻿using ErrorOr;
-using Irrigation.Application.Valves.Commands;
 using Irrigation.Infrastructure.Mqtt.Abstraction;
 using Mediator;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Irrigation.Application.Valves.Events;
 using Irrigation.Domain.Shared;
 using Irrigation.Domain.Valves;
 
@@ -28,14 +28,19 @@ public sealed partial class ValveMessageHandler(IMediator mediator) : IMessageHa
             return Result.Success;
         }
 
-        var status = Enum.Parse<ValveStatus>(payload.Status, true);
+        if (!Enum.TryParse<ValveStatus>(payload.Status, true, out var status) || !Enum.IsDefined(status))
+        {
+            return Error.Validation("Valve.InvalidStatus", $"Invalid valve status '{payload.Status}'.");
+        }
 
-        return await mediator.Send(
-            new UpdateValveCommand
+        await mediator.Publish(
+            new UpdateValveEvent
             {
                 Index = payload.Id, 
                 Device = HardwareId.From(message.Device), 
                 Status = status
             }, ct);
+
+         return Result.Success;
     }
 }

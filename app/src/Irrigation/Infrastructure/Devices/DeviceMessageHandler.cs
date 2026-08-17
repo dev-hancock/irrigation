@@ -1,10 +1,10 @@
 ﻿using ErrorOr;
-using Irrigation.Application.Devices.Commands;
+using Irrigation.Application.Devices.Events;
+using Irrigation.Domain.Shared;
 using Irrigation.Infrastructure.Mqtt.Abstraction;
 using Mediator;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using Irrigation.Domain.Shared;
 
 namespace Irrigation.Infrastructure.Devices;
 
@@ -27,13 +27,15 @@ public sealed partial class DeviceMessageHandler(IMediator mediator) : IMessageH
             return Result.Success;
         }
 
-        return await mediator.Send(
-            new UpdateDeviceCommand
+        await mediator.Publish(
+            new UpdateDeviceEvent
             {
                 Id = HardwareId.From(message.Device),
                 Firmware = payload.Firmware, 
                 Model = payload.Model, 
                 Version = payload.Version
             }, ct);
+
+        return Result.Success;
     }
 }

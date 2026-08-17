@@ -44,7 +44,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Application\Devices\Events\" />
+	  <Folder Include="Application\Devices\Commands\" />
 	</ItemGroup>
 
 </Project>

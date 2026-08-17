@@ -1,4 +1,4 @@
-namespace Irrigation.Components.Dashboard;
+namespace Irrigation.Web.Components.Dashboard;
 
 public sealed record DashboardMetric(string Label, string Value, string Detail);
 

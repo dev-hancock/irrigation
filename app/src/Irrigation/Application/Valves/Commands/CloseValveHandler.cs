@@ -23,7 +23,7 @@ public sealed class CloseValveHandler(IRepository<Valve> repo, ILogger<CloseValv
 
         if (valve is null)
         {
-            return Error.NotFound("Valve.NotFound", $"Valve with id '{request.Id}' not found.");
+            return Error.NotFound("Valve.NotFound", $"Valve with id '{request.Id.Value}' not found.");
         }
 
         valve.Close();

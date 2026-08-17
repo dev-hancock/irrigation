@@ -24,7 +24,7 @@ public class RenameValveHandler(IRepository<Valve> repo) : IRequestHandler<Renam
 
         if (valve is null)
         {
-            return Error.NotFound("Valve.NotFound", $"Valve with id '{request.Id}' not found.");
+            return Error.NotFound("Valve.NotFound", $"Valve with id '{request.Id.Value}' not found.");
         }
 
         valve.Rename(request.Name);
