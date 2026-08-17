@@ -1,8 +1,7 @@
 ﻿using ErrorOr;
-using Irrigation.Application.Health;
 using Mediator;
 
-namespace Irrigation.Application.Devices.Commands;
+namespace Irrigation.Application.Health.Commands;
 
 public class SendHeartbeatCommand : IRequest<ErrorOr<Success>>;
 
@@ -10,8 +9,6 @@ public class SendHeartbeatHandler(IHealthService health) : IRequestHandler<SendH
 {
     public async ValueTask<ErrorOr<Success>> Handle(SendHeartbeatCommand request, CancellationToken cancellationToken)
     {
-        await health.Heartbeat(cancellationToken);
-
-        return Result.Success;
+        return await health.Heartbeat(cancellationToken);
     }
 }

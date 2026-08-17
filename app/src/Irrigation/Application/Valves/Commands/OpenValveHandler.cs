@@ -9,7 +9,7 @@ namespace Irrigation.Application.Valves.Commands;
 
 public sealed record OpenValveCommand : IRequest<ErrorOr<Success>>
 {
-    public required Guid Id { get; set; }
+    public required ValveId Id { get; set; }
 }
 
 public sealed class OpenValveHandler(IRepository<Valve> valves, ILogger<OpenValveHandler> logger)
@@ -17,10 +17,9 @@ public sealed class OpenValveHandler(IRepository<Valve> valves, ILogger<OpenValv
 {
     public async ValueTask<ErrorOr<Success>> Handle(OpenValveCommand request, CancellationToken cancellationToken)
     {
-        var spec = new ValveSpec(ValveId.From(request.Id));
+        var spec = new ValveSpec(request.Id);
 
         var valve = await valves.FirstOrDefaultAsync(spec, cancellationToken);
-
 
         if (valve is null)
         {

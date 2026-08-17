@@ -4,6 +4,8 @@ using Irrigation.Infrastructure.Mqtt.Abstraction;
 using Mediator;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Irrigation.Domain.Shared;
+using Irrigation.Domain.Valves;
 
 namespace Irrigation.Infrastructure.Valves;
 
@@ -26,10 +28,14 @@ public sealed partial class ValveMessageHandler(IMediator mediator) : IMessageHa
             return Result.Success;
         }
 
+        var status = Enum.Parse<ValveStatus>(payload.Status, true);
+
         return await mediator.Send(
             new UpdateValveCommand
             {
-                Index = payload.Id, Device = message.Device, Status = payload.Status
+                Index = payload.Id, 
+                Device = HardwareId.From(message.Device), 
+                Status = status
             }, ct);
     }
 }

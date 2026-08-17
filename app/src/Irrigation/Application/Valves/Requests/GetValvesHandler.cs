@@ -17,9 +17,9 @@ public class GetValvesHandler(IRepository<Valve> repo) : IRequestHandler<GetValv
 {
     public async ValueTask<ErrorOr<ValveDto[]>> Handle(GetValvesRequest request, CancellationToken cancellationToken)
     {
-        var valves = await repo.ListAsync(
-            new ValvesReadOnlySpec(DeviceId.From(request.Device)),
-            cancellationToken);
+        var spec = new ValvesReadOnlySpec(request.Device);
+
+        var valves = await repo.ListAsync(spec, cancellationToken);
 
         return valves
             .Select(ValveDto.From)

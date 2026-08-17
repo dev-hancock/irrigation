@@ -1,5 +1,6 @@
 ﻿using Irrigation.Application.Common;
 using Irrigation.Application.Extensions;
+using Irrigation.Application.Valves.Events.Contracts;
 using Irrigation.Domain.Devices;
 using Irrigation.Domain.Repository;
 using Irrigation.Domain.Specifications;
@@ -13,9 +14,9 @@ public class ValveOpeningHandler(IRepository<Device> devices, IValveService valv
 {
     public async ValueTask Handle(ValveOpeningEvent notification, CancellationToken cancellationToken)
     {
-        var device = await devices.FirstOrDefaultAsync(
-            new DeviceSpec(notification.DeviceId),
-            cancellationToken);
+        var spec = new DeviceSpec(notification.DeviceId);
+
+        var device = await devices.FirstOrDefaultAsync(spec, cancellationToken);
 
         if (device is null)
         {

@@ -9,7 +9,7 @@ namespace Irrigation.Application.Valves.Commands;
 
 public sealed record CloseValveCommand : IRequest<ErrorOr<Success>>
 {
-    public required Guid Id { get; set; }
+    public required ValveId Id { get; set; }
 }
 
 public sealed class CloseValveHandler(IRepository<Valve> repo, ILogger<CloseValveHandler> logger)
@@ -17,9 +17,9 @@ public sealed class CloseValveHandler(IRepository<Valve> repo, ILogger<CloseValv
 {
     public async ValueTask<ErrorOr<Success>> Handle(CloseValveCommand request, CancellationToken cancellationToken)
     {
-        var valve = await repo.FirstOrDefaultAsync(
-            new ValveSpec(ValveId.From(request.Id)),
-            cancellationToken);
+        var spec = new ValveSpec(request.Id);
+
+        var valve = await repo.FirstOrDefaultAsync(spec, cancellationToken);
 
         if (valve is null)
         {

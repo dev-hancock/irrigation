@@ -10,16 +10,16 @@ namespace Irrigation.Application.Valves.Requests;
 
 public class GetValveRequest : IRequest<ErrorOr<ValveDto>>
 {
-    public Guid Id { get; set; }
+    public ValveId Id { get; set; }
 }
 
 public class GetValveHandler(IRepository<Valve> repo) : IRequestHandler<GetValveRequest, ErrorOr<ValveDto>>
 {
     public async ValueTask<ErrorOr<ValveDto>> Handle(GetValveRequest request, CancellationToken cancellationToken)
     {
-        var valve = await repo.FirstOrDefaultAsync(
-            new ValveReadOnlySpec(ValveId.From(request.Id)),
-            cancellationToken);
+        var spec = new ValveReadOnlySpec(request.Id);
+
+        var valve = await repo.FirstOrDefaultAsync(spec, cancellationToken);
 
         if (valve is null)
         {

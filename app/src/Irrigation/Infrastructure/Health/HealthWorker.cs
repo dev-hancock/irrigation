@@ -1,4 +1,4 @@
-﻿using Irrigation.Application.Devices.Commands;
+﻿using Irrigation.Application.Health.Commands;
 using Mediator;
 using Microsoft.Extensions.Options;
 
@@ -20,7 +20,7 @@ public class HealthWorker(IServiceScopeFactory factory, IOptions<HealthOptions> 
 
             await mediator.Send(new SendHeartbeatCommand(), stoppingToken);
 
-            await mediator.Send(new CheckDeviceHealthCommand(), stoppingToken);
+            await mediator.Send(new CheckHealthCommand(), stoppingToken);
         }
     }
 }

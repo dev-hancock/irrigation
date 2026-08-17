@@ -9,11 +9,11 @@ namespace Irrigation.Application.Valves.Commands;
 
 public sealed record UpdateValveCommand : IRequest<ErrorOr<Success>>
 {
-    public required string Device { get; set; }
+    public required HardwareId Device { get; set; }
 
     public required int Index { get; set; }
 
-    public required string Status { get; set; }
+    public required ValveStatus Status { get; set; }
 }
 
 public class UpdateValveHandler(IUnitOfWork uow, ILogger<UpdateValveHandler> logger)
@@ -21,14 +21,9 @@ public class UpdateValveHandler(IUnitOfWork uow, ILogger<UpdateValveHandler> log
 {
     public async ValueTask<ErrorOr<Success>> Handle(UpdateValveCommand request, CancellationToken cancellationToken)
     {
-        if (!Enum.TryParse<ValveStatus>(request.Status, true, out var status))
-        {
-            return Error.Failure("Valve.InvalidState", $"Invalid valve status '{request.Status}'.");
-        }
+        var spec = new DeviceSpec(request.Device);
 
-        var device = await uow.Devices.FirstOrDefaultAsync(
-            new DeviceSpec(HardwareId.From(request.Device)),
-            cancellationToken);
+        var device = await uow.Devices.FirstOrDefaultAsync(spec, cancellationToken);
 
         if (device is null)
         {
@@ -44,14 +39,14 @@ public class UpdateValveHandler(IUnitOfWork uow, ILogger<UpdateValveHandler> log
             valve = Valve.Create(
                 device.Id,
                 request.Index,
-                status
+                request.Status
             );
 
             await uow.Valves.AddAsync(valve, cancellationToken);
         }
         else
         {
-            valve.SetStatus(status);
+            valve.SetStatus(request.Status);
         }
 
         logger.LogInformation($"Valve '{device.HardwareId.Value}:{valve.Index}' is {valve.Status}");

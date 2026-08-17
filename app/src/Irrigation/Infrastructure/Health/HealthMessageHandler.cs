@@ -1,7 +1,8 @@
 ﻿using System.Text.Json;
 using System.Text.RegularExpressions;
 using ErrorOr;
-using Irrigation.Application.Devices.Events;
+using Irrigation.Application.Health.Events;
+using Irrigation.Domain.Shared;
 using Irrigation.Infrastructure.Mqtt.Abstraction;
 using Mediator;
 
@@ -26,10 +27,12 @@ public sealed partial class HealthMessageHandler(IMediator mediator) : IMessageH
             return Result.Success;
         }
 
-        return await mediator.Send(
-            new DeviceHeartbeatCommand
+        await mediator.Publish(
+            new HeartbeatReceivedEvent
             {
-                Id = message.Device
+                Id = HardwareId.From(message.Device)
             }, ct);
+
+        return Result.Success;
     }
 }

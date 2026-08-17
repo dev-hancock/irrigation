@@ -9,7 +9,7 @@ namespace Irrigation.Application.Valves.Commands;
 
 public sealed record RenameValveCommand : IRequest<ErrorOr<Success>>
 {
-    public required Guid Id { get; set; }
+    public required ValveId Id { get; set; }
 
     public required string Name { get; set; }
 }
@@ -18,7 +18,7 @@ public class RenameValveHandler(IRepository<Valve> repo) : IRequestHandler<Renam
 {
     public async ValueTask<ErrorOr<Success>> Handle(RenameValveCommand request, CancellationToken cancellationToken)
     {
-        var spec = new ValveSpec(ValveId.From(request.Id));
+        var spec = new ValveSpec(request.Id);
 
         var valve = await repo.FirstOrDefaultAsync(spec, cancellationToken);
 

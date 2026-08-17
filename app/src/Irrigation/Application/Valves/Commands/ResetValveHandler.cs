@@ -9,16 +9,16 @@ namespace Irrigation.Application.Valves.Commands;
 
 public sealed record ResetValveCommand : IRequest<ErrorOr<Success>>
 {
-    public Guid? Device { get; set; }
+    public DeviceId? Device { get; set; }
 }
 
 public sealed class ResetValveHandler(IRepository<Valve> repo) : IRequestHandler<ResetValveCommand, ErrorOr<Success>>
 {
     public async ValueTask<ErrorOr<Success>> Handle(ResetValveCommand request, CancellationToken cancellationToken)
     {
-        var valves = await repo.ListAsync(
-            new ValvesSpec(DeviceId.From(request.Device)),
-            cancellationToken);
+        var spec = new ValvesSpec(request.Device);
+
+        var valves = await repo.ListAsync(spec, cancellationToken);
 
         foreach (var valve in valves)
         {

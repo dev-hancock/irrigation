@@ -3,22 +3,10 @@ using Irrigation.Application.Devices.Commands;
 using Irrigation.Infrastructure.Mqtt.Abstraction;
 using Mediator;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using Irrigation.Domain.Shared;
 
 namespace Irrigation.Infrastructure.Devices;
-
-public sealed class DeviceMessage
-{
-    [JsonPropertyName("firmware")]
-    public string Firmware { get; set; }
-
-    [JsonPropertyName("model")]
-    public string Model { get; set; }
-
-    [JsonPropertyName("version")]
-    public string Version { get; set; }
-}
 
 public sealed partial class DeviceMessageHandler(IMediator mediator) : IMessageHandler
 {
@@ -42,7 +30,10 @@ public sealed partial class DeviceMessageHandler(IMediator mediator) : IMessageH
         return await mediator.Send(
             new UpdateDeviceCommand
             {
-                Id = message.Device, Firmware = payload.Firmware, Model = payload.Model, Version = payload.Version
+                Id = HardwareId.From(message.Device),
+                Firmware = payload.Firmware, 
+                Model = payload.Model, 
+                Version = payload.Version
             }, ct);
     }
 }

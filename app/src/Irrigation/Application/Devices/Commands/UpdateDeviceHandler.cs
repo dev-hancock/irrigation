@@ -9,7 +9,7 @@ namespace Irrigation.Application.Devices.Commands;
 
 public class UpdateDeviceCommand : IRequest<ErrorOr<Success>>
 {
-    public required string Id { get; set; }
+    public required HardwareId Id { get; set; }
 
     public required string Firmware { get; set; }
 
@@ -22,14 +22,14 @@ public class UpdateDeviceHandler(IRepository<Device> repo) : IRequestHandler<Upd
 {
     public async ValueTask<ErrorOr<Success>> Handle(UpdateDeviceCommand request, CancellationToken cancellationToken)
     {
-        var device = await repo.FirstOrDefaultAsync(
-            new DeviceSpec(HardwareId.From(request.Id)),
-            cancellationToken);
+        var spec = new DeviceSpec(request.Id);
+
+        var device = await repo.FirstOrDefaultAsync(spec, cancellationToken);
 
         if (device is null)
         {
             device = Device.Create(
-                HardwareId.From(request.Id),
+                request.Id,
                 request.Firmware,
                 request.Model,
                 request.Version);
