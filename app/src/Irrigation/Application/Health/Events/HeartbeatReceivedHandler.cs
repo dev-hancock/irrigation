@@ -1,8 +1,7 @@
-using ErrorOr;
+using Irrigation.Application.Common;
 using Irrigation.Domain.Devices;
-using Irrigation.Domain.Repository;
+using Irrigation.Domain.Devices.Specifications;
 using Irrigation.Domain.Shared;
-using Irrigation.Domain.Specifications;
 using Mediator;
 
 namespace Irrigation.Application.Health.Events;

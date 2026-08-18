@@ -9,5 +9,18 @@ public readonly record struct ActivityType(string Value)
         return new ActivityType(value);
     }
 
-    public override string ToString() => Value;
+    public override string ToString()
+    {
+        return Value;
+    }
+
+    public static implicit operator string(ActivityType type)
+    {
+        return type.Value;
+    }
+
+    public static explicit operator ActivityType(string value)
+    {
+        return new ActivityType(value);
+    }
 }

@@ -1,12 +1,14 @@
 ﻿@page "/"
 @rendermode InteractiveServer
 @using Irrigation.Application.Common
-@using Irrigation.Application.Valves.Commands
-@using Irrigation.Application.Valves.Events.Contracts
-@using Irrigation.Application.Valves.Requests
-@using Irrigation.Application.Valves.Requests.Contracts
-@using Irrigation.Web.Components.Dashboard
+@using Irrigation.Application.Valves.Commands.CloseValve
+@using Irrigation.Application.Valves.Commands.OpenValve
+@using Irrigation.Application.Valves.Events.Outbound
+@using Irrigation.Application.Valves.Queries
+@using Irrigation.Application.Valves.Queries.GetValve
+@using Irrigation.Application.Valves.Queries.GetValves
 @using Irrigation.Domain.Shared
+@using Irrigation.Web.Components.Dashboard
 @using Mediator
 @implements IDisposable
 
@@ -78,7 +80,7 @@
     {
         _token = Events.Subscribe<ValveChanged>(async (x, t) =>
         {
-            var result = await Mediator.Send(new GetValveRequest
+            var result = await Mediator.Send(new GetValveQuery
             {
                 Id = ValveId.From(x.Id)
             }, t);
@@ -93,7 +95,7 @@
             await InvokeAsync(StateHasChanged);
         });
 
-        var result = await Mediator.Send(new GetValvesRequest());
+        var result = await Mediator.Send(new GetValvesQuery());
 
 
         if (result.IsError)
@@ -109,17 +111,17 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    private void CreateOrUpdate(ValveDto dto)
+    private void CreateOrUpdate(ValveModel model)
     {
-        var existing = _valves.FirstOrDefault(x => x.Id == dto.Id);
+        var existing = _valves.FirstOrDefault(x => x.Id == model.Id);
 
         var updated = new ValveSummary(
-            dto.Id,
-            dto.Index,
-            dto.Name,
+            model.Id,
+            model.Index,
+            model.Name,
             "Zone",
-            dto.Status,
-            dto.Updated);
+            model.Status,
+            model.Updated);
 
         if (existing is null)
         {

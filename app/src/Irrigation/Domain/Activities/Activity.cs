@@ -1,38 +1,35 @@
-﻿using System.Diagnostics;
+﻿using Irrigation.Domain.Activities.Events;
 using Irrigation.Domain.Common;
 using Irrigation.Domain.Shared;
 
-namespace Irrigation.Domain.Activities
+namespace Irrigation.Domain.Activities;
+
+public class Activity : AggregateRoot
 {
-    public class Activity : AggregateRoot
+    public ActivityId Id { get; private set; }
+
+    public DateTimeOffset Timestamp { get; private set; }
+
+    public ActivityType Type { get; private set; }
+
+    public ActivityOrigin Origin { get; private set; }
+
+    public ActivityCategory Category { get; private set; }
+
+    public ActivitySubject? Subject { get; private set; }
+
+    public string? Data { get; private set; }
+
+    public static Activity Create(
+        ActivityType type,
+        ActivityCategory category,
+        ActivityOrigin origin,
+        string data)
     {
-        public ActivityId Id { get; private set; }
+        var activity = new Activity();
 
-        public DateTimeOffset Timestamp { get; private set; }
+        activity.Raise(new ActivityCreatedEvent());
 
-        public ActivityType Type { get; private set; }
-
-        public ActivitySource Source { get; private set; }
-
-        public ActivitySubject? Subject { get; private set; }
-
-        public string Message { get; private set; }
-
-        public Activity()
-        {
-            
-        }
-
-        public static Activity Create(
-            ActivityType type,
-            Guid subjectId,
-            string message)
-        {
-            var activity = new Activity();
-
-            activity.Raise(new ActivityCreatedEvent());
-
-            return activity;
-        }
+        return activity;
     }
 }

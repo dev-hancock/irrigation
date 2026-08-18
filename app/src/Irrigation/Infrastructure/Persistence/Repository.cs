@@ -1,5 +1,5 @@
 ﻿using Ardalis.Specification.EntityFrameworkCore;
-using Irrigation.Domain.Repository;
+using Irrigation.Application.Common;
 
 namespace Irrigation.Infrastructure.Persistence;
 

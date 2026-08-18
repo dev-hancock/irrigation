@@ -44,8 +44,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Application\Activities\Events\" />
+	  <Folder Include="Application\Activities\Commands\" />
 	  <Folder Include="Application\Devices\Commands\" />
+	  <Folder Include="Application\Devices\Events\Domain\" />
+	  <Folder Include="Application\Devices\Events\Outbound\" />
 	</ItemGroup>
 
 </Project>

@@ -1,7 +1,6 @@
 ﻿using Irrigation.Application.Common;
 using Irrigation.Application.Health;
 using Irrigation.Application.Valves;
-using Irrigation.Domain.Repository;
 using Irrigation.Infrastructure.Devices;
 using Irrigation.Infrastructure.Health;
 using Irrigation.Infrastructure.Mqtt;

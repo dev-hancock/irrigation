@@ -10,9 +10,6 @@ namespace Irrigation.Infrastructure.Health;
 
 public sealed partial class HealthMessageHandler(IMediator mediator) : IMessageHandler
 {
-    [GeneratedRegex("/pong$")]
-    private static partial Regex Pattern();
-
     public bool CanHandle(Message message)
     {
         return Pattern().IsMatch(message.Topic.Value);
@@ -35,4 +32,7 @@ public sealed partial class HealthMessageHandler(IMediator mediator) : IMessageH
 
         return Result.Success;
     }
+
+    [GeneratedRegex("/pong$")]
+    private static partial Regex Pattern();
 }

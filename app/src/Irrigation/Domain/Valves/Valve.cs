@@ -1,5 +1,6 @@
 ﻿using Irrigation.Domain.Common;
 using Irrigation.Domain.Shared;
+using Irrigation.Domain.Valves.Events;
 
 namespace Irrigation.Domain.Valves;
 
@@ -80,18 +81,35 @@ public class Valve : AggregateRoot
         UpdatedAt = DateTimeOffset.UtcNow;
     }
 
-    public void SetStatus(ValveStatus status)
+    public void Opened()
     {
-        if (status == Status)
+        if (Status == ValveStatus.Open)
         {
             return;
         }
 
-        Status = status;
+        Status = ValveStatus.Open;
 
-        Raise(new ValveStatusChangedEvent
+        Raise(new ValveOpenedEvent
         {
-            Id = Id, Status = status
+            Id = Id, Name = Name, Index = Index, DeviceId = DeviceId
+        });
+
+        UpdatedAt = DateTimeOffset.UtcNow;
+    }
+
+    public void Closed()
+    {
+        if (Status == ValveStatus.Closed)
+        {
+            return;
+        }
+
+        Status = ValveStatus.Closed;
+
+        Raise(new ValveClosedEvent
+        {
+            Id = Id, Name = Name, Index = Index, DeviceId = DeviceId
         });
 
         UpdatedAt = DateTimeOffset.UtcNow;

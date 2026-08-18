@@ -1,7 +1,7 @@
 ﻿using ErrorOr;
+using Irrigation.Application.Common;
 using Irrigation.Domain.Devices;
-using Irrigation.Domain.Repository;
-using Irrigation.Domain.Specifications;
+using Irrigation.Domain.Devices.Specifications;
 using Mediator;
 
 namespace Irrigation.Application.Health.Commands;
@@ -14,7 +14,7 @@ public class CheckHealthHandler(IRepository<Device> repo) : IRequestHandler<Chec
     {
         var spec = new DeviceNotSeenSinceSpec(DateTimeOffset.UtcNow.Subtract(TimeSpan.FromSeconds(30)));
 
-        var devices = await repo.ListAsync( spec, cancellationToken);
+        var devices = await repo.ListAsync(spec, cancellationToken);
 
         foreach (var device in devices)
         {

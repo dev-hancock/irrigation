@@ -1,0 +1,31 @@
+﻿using ErrorOr;
+using Irrigation.Application.Common;
+using Irrigation.Domain.Valves;
+using Irrigation.Domain.Valves.Specifications;
+using Mediator;
+
+namespace Irrigation.Application.Valves.Commands.CloseValve;
+
+public sealed class CloseValveHandler(IRepository<Valve> repo, ILogger<CloseValveHandler> logger)
+    : IRequestHandler<CloseValveCommand, ErrorOr<Success>>
+{
+    public async ValueTask<ErrorOr<Success>> Handle(CloseValveCommand request, CancellationToken cancellationToken)
+    {
+        var spec = new ValveSpec(request.Id);
+
+        var valve = await repo.FirstOrDefaultAsync(spec, cancellationToken);
+
+        if (valve is null)
+        {
+            return Error.NotFound("Valve.NotFound", $"Valve with id '{request.Id.Value}' not found.");
+        }
+
+        valve.Close();
+
+        logger.LogInformation($"Valve '{valve.Index}' was closed.");
+
+        await repo.SaveChangesAsync(cancellationToken);
+
+        return Result.Success;
+    }
+}

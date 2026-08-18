@@ -1,5 +1,5 @@
-﻿using Irrigation.Domain.Devices;
-using Irrigation.Domain.Repository;
+﻿using Irrigation.Application.Common;
+using Irrigation.Domain.Devices;
 using Irrigation.Domain.Valves;
 
 namespace Irrigation.Infrastructure.Persistence;
