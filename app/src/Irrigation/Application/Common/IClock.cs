@@ -1,7 +1,6 @@
-﻿namespace Irrigation.Application.Common
+﻿namespace Irrigation.Application.Common;
+
+public interface IClock
 {
-    public interface IClock
-    {
-        DateTimeOffset Now { get; }
-    }
+    DateTimeOffset Now { get; }
 }

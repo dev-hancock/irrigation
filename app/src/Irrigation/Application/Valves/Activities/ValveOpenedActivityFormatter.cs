@@ -1,6 +1,6 @@
-﻿using Irrigation.Application.Activities.Abstractions;
+﻿using System.Text.Json;
+using Irrigation.Application.Activities.Abstractions;
 using Irrigation.Domain.Shared;
-using System.Text.Json;
 
 namespace Irrigation.Application.Valves.Activities;
 

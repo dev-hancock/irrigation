@@ -54,11 +54,10 @@ public sealed class SagaProcessor(IrrigationDbContext db, IServiceProvider servi
             var handler = GetHandler(type);
 
             var result = await handler.Handle(
-                state, 
+                state,
                 new SagaContext
                 {
-                    Id = saga.Id,
-                    Attempts = saga.Attempts
+                    Id = saga.Id, Attempts = saga.Attempts
                 },
                 ct);
 
@@ -86,7 +85,6 @@ public sealed class SagaProcessor(IrrigationDbContext db, IServiceProvider servi
                     break;
                 }
             }
-
         }
         catch (Exception ex)
         {

@@ -28,9 +28,7 @@ public sealed class OpenValveHandler(IRepository<Valve> valves, ISagaStore sagas
         await sagas.Start(
             new ValveOperationState
             {
-                ValveId = valve.Id,
-                Target = ValveStatus.Open,
-                Origin = ActivityOrigin.Manual
+                ValveId = valve.Id, Target = ValveStatus.Open, Origin = ActivityOrigin.Manual
             },
             cancellationToken);
 

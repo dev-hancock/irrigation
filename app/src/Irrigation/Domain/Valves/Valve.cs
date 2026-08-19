@@ -94,10 +94,7 @@ public class Valve : AggregateRoot
 
         Raise(new ValveFaultedEvent
         {
-            Id = Id,
-            Name = Name,
-            Index = Index,
-            DeviceId = DeviceId
+            Id = Id, Name = Name, Index = Index, DeviceId = DeviceId
         });
     }
 
@@ -116,7 +113,11 @@ public class Valve : AggregateRoot
     {
         Raise(new ValveOpenedEvent
         {
-            Id = Id, Name = Name, Index = Index, DeviceId = DeviceId, Origin = origin
+            Id = Id,
+            Name = Name,
+            Index = Index,
+            DeviceId = DeviceId,
+            Origin = origin
         });
     }
 
@@ -124,7 +125,11 @@ public class Valve : AggregateRoot
     {
         Raise(new ValveClosedEvent
         {
-            Id = Id, Name = Name, Index = Index, DeviceId = DeviceId, Origin = origin
+            Id = Id,
+            Name = Name,
+            Index = Index,
+            DeviceId = DeviceId,
+            Origin = origin
         });
     }
 

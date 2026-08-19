@@ -10,8 +10,7 @@ public sealed class SagaStore(IrrigationDbContext db) : ISagaStore
     {
         var saga = new SagaInstance
         {
-            Type = typeof(TState).AssemblyQualifiedName!,
-            Data = JsonSerializer.Serialize(state)
+            Type = typeof(TState).AssemblyQualifiedName!, Data = JsonSerializer.Serialize(state)
         };
 
         db.Sagas.Add(saga);
