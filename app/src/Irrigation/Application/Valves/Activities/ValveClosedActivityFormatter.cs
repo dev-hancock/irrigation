@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using Irrigation.Application.Activities.Abstractions;
-using Irrigation.Domain.Activities;
 using Irrigation.Domain.Shared;
 
 namespace Irrigation.Application.Valves.Activities;
@@ -9,15 +8,15 @@ public class ValveClosedActivityFormatter : IActivityFormatter
 {
     public ActivityType Type => ValveActivity.Closed;
 
-    public string[] GetArguments(Activity activity)
+    public string[] GetArguments(string data)
     {
-        var data = JsonSerializer.Deserialize<ValveActivityData>(activity.Data!);
+        var payload = JsonSerializer.Deserialize<ValveActivityData>(data);
 
-        if (data is null)
+        if (payload is null)
         {
-            throw new InvalidOperationException($"Invalid activity data: {activity.Type}");
+            throw new InvalidOperationException($"Invalid data for activity '{Type}'.");
         }
 
-        return [data.Name];
+        return [payload.Name];
     }
 }

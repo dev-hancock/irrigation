@@ -14,7 +14,7 @@ public class ActivityMapper(IEnumerable<IActivityFormatter> formatters)
             Type = activity.Type,
             Category = activity.Category,
             Origin = activity.Origin,
-            Arguments = formatter.GetArguments(activity),
+            Arguments = formatter.GetArguments(activity.Data),
             Timestamp = activity.Timestamp
         };
     }

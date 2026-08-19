@@ -18,7 +18,7 @@ public class Activity : AggregateRoot
 
     public ActivitySubject? Subject { get; private set; }
 
-    public string? Data { get; private set; }
+    public  string Data { get; private set; }
 
     public static Activity Create(
         ActivityType type,
@@ -26,7 +26,10 @@ public class Activity : AggregateRoot
         ActivityOrigin origin,
         string data)
     {
-        var activity = new Activity();
+        var activity = new Activity
+        {
+            Data = data
+        };
 
         activity.Raise(new ActivityCreatedEvent());
 

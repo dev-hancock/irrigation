@@ -23,6 +23,7 @@ public static class DependencyInjection
 
         services.AddValves();
         services.AddDevices();
+        services.AddActivities();
         services.AddHealth();
 
         services.AddMediator(opt => opt.ServiceLifetime = ServiceLifetime.Scoped);
@@ -71,6 +72,13 @@ public static class DependencyInjection
         return services;
     }
 
+    private static IServiceCollection AddSaga(this IServiceCollection services)
+    {
+        // todo:
+
+        return services;
+    }
+
     private static IServiceCollection AddValves(this IServiceCollection services)
     {
         services.AddScoped<IMessageHandler, ValveMessageHandler>();
@@ -83,6 +91,13 @@ public static class DependencyInjection
     private static IServiceCollection AddDevices(this IServiceCollection services)
     {
         services.AddScoped<IMessageHandler, DeviceMessageHandler>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddActivities(this IServiceCollection services)
+    {
+        // todo:
 
         return services;
     }

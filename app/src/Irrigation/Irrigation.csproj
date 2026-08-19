@@ -12,13 +12,9 @@
 
 	<ItemGroup>
 		<Compile Remove="Application\Devices\NewFolder\**" />
-		<Compile Remove="Infrastructure\NewFolder\**" />
 		<Content Remove="Application\Devices\NewFolder\**" />
-		<Content Remove="Infrastructure\NewFolder\**" />
 		<EmbeddedResource Remove="Application\Devices\NewFolder\**" />
-		<EmbeddedResource Remove="Infrastructure\NewFolder\**" />
 		<None Remove="Application\Devices\NewFolder\**" />
-		<None Remove="Infrastructure\NewFolder\**" />
 	</ItemGroup>
 
 	<ItemGroup>
