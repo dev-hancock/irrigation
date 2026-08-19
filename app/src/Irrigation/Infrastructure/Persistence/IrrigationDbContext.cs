@@ -3,7 +3,7 @@ using Irrigation.Domain.Common;
 using Irrigation.Domain.Devices;
 using Irrigation.Domain.Valves;
 using Irrigation.Infrastructure.Outbox;
-using Irrigation.Infrastructure.Saga;
+using Irrigation.Infrastructure.Sagas;
 using Microsoft.EntityFrameworkCore;
 
 namespace Irrigation.Infrastructure.Persistence;
@@ -16,7 +16,7 @@ public class IrrigationDbContext(DbContextOptions<IrrigationDbContext> options) 
 
     public DbSet<OutboxMessage> Outbox { get; set; }
 
-    public DbSet<SagaState> Sagas { get; set; }
+    public DbSet<SagaInstance> Sagas { get; set; }
 
     public override async Task<int> SaveChangesAsync(
         CancellationToken ct = default)

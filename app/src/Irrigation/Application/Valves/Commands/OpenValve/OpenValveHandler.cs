@@ -1,12 +1,15 @@
 ﻿using ErrorOr;
 using Irrigation.Application.Common;
+using Irrigation.Application.Common.Sagas;
+using Irrigation.Application.Valves.Sagas;
+using Irrigation.Domain.Activities;
 using Irrigation.Domain.Valves;
 using Irrigation.Domain.Valves.Specifications;
 using Mediator;
 
 namespace Irrigation.Application.Valves.Commands.OpenValve;
 
-public sealed class OpenValveHandler(IRepository<Valve> valves, ILogger<OpenValveHandler> logger)
+public sealed class OpenValveHandler(IRepository<Valve> valves, ISagaStore sagas, ILogger<OpenValveHandler> logger)
     : IRequestHandler<OpenValveCommand, ErrorOr<Success>>
 {
     public async ValueTask<ErrorOr<Success>> Handle(OpenValveCommand request, CancellationToken cancellationToken)
@@ -21,6 +24,15 @@ public sealed class OpenValveHandler(IRepository<Valve> valves, ILogger<OpenValv
         }
 
         valve.Open();
+
+        await sagas.Start(
+            new ValveOperationState
+            {
+                ValveId = valve.Id,
+                Target = ValveStatus.Open,
+                Origin = ActivityOrigin.Manual
+            },
+            cancellationToken);
 
         logger.LogInformation($"Valve '{valve.Index}' was opened.");
 

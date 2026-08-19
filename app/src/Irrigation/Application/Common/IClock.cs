@@ -1,4 +1,4 @@
-﻿namespace Irrigation.Application.Activities.Abstractions
+﻿namespace Irrigation.Application.Common
 {
     public interface IClock
     {

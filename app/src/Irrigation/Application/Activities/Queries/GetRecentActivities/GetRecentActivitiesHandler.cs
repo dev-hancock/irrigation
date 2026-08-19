@@ -1,6 +1,7 @@
 ﻿using ErrorOr;
 using Irrigation.Application.Common;
 using Irrigation.Domain.Activities;
+using Irrigation.Domain.Activities.Specifications;
 using Mediator;
 
 namespace Irrigation.Application.Activities.Queries.GetRecentActivities;
@@ -16,6 +17,6 @@ public class GetRecentActivitiesHandler(IRepository<Activity> repo, IActivityMap
 
         return activities
             .Select(mapper.Map)
-            .ToList();
+            .ToArray();
     }
 }

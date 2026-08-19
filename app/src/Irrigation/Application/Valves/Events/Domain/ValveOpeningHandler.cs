@@ -8,7 +8,7 @@ using Mediator;
 
 namespace Irrigation.Application.Valves.Events.Domain;
 
-public class ValveOpeningHandler(IRepository<Device> devices, IValveService valves, IEventBus events)
+public class ValveOpeningHandler(IRepository<Device> devices, IValveController controller, IEventBus events)
     : INotificationHandler<ValveOpeningEvent>
 {
     public async ValueTask Handle(ValveOpeningEvent notification, CancellationToken cancellationToken)
@@ -22,7 +22,7 @@ public class ValveOpeningHandler(IRepository<Device> devices, IValveService valv
             throw new InvalidOperationException($"Device '{notification.DeviceId.Value}' not found.");
         }
 
-        var result = await valves.Open(notification.Index, device.HardwareId, cancellationToken);
+        var result = await controller.Open(notification.Index, device.HardwareId, cancellationToken);
 
         result.ThrowIfError();
 

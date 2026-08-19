@@ -5,7 +5,7 @@ using Irrigation.Infrastructure.Mqtt.Abstraction;
 
 namespace Irrigation.Infrastructure.Valves;
 
-public class ValveService(IMqttPublisher client) : IValveService
+public class ValveController(IMqttPublisher client) : IValveController
 {
     public async Task<ErrorOr<Success>> Open(int index, HardwareId device, CancellationToken ct = default)
     {

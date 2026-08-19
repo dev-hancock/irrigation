@@ -2,8 +2,10 @@
 
 public enum ValveStatus
 {
+    Unknown,
     Open,
     Opening,
     Closed,
-    Closing
+    Closing,
+    Faulted
 }

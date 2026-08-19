@@ -35,23 +35,7 @@ public class UpdateValveHandler(IUnitOfWork uow, ILogger<UpdateValveHandler> log
         }
         else
         {
-            switch (notification.Status)
-            {
-                case ValveStatus.Open:
-                {
-                    valve.Opened();
-                    break;
-                }
-                case ValveStatus.Closed:
-                {
-                    valve.Closed();
-                    break;
-                }
-                case ValveStatus.Opening:
-                case ValveStatus.Closing:
-                default:
-                    break;
-            }
+            valve.SetStatus(notification.Status);
         }
 
         logger.LogInformation($"Valve '{device.HardwareId.Value}:{valve.Index}' is {valve.Status}");

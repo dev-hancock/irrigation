@@ -3,7 +3,7 @@ using Irrigation.Domain.Shared;
 
 namespace Irrigation.Application.Valves;
 
-public interface IValveService
+public interface IValveController
 {
     public Task<ErrorOr<Success>> Open(int index, HardwareId device, CancellationToken ct = default);
 

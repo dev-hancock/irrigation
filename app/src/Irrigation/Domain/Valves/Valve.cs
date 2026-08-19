@@ -1,4 +1,5 @@
-﻿using Irrigation.Domain.Common;
+﻿using Irrigation.Domain.Activities;
+using Irrigation.Domain.Common;
 using Irrigation.Domain.Shared;
 using Irrigation.Domain.Valves.Events;
 
@@ -81,38 +82,50 @@ public class Valve : AggregateRoot
         UpdatedAt = DateTimeOffset.UtcNow;
     }
 
-    public void Opened()
+    public void Fault()
     {
-        if (Status == ValveStatus.Open)
+        if (Status == ValveStatus.Faulted)
         {
             return;
         }
 
-        Status = ValveStatus.Open;
+        Status = ValveStatus.Faulted;
+        UpdatedAt = DateTimeOffset.UtcNow;
 
-        Raise(new ValveOpenedEvent
+        Raise(new ValveFaultedEvent
         {
-            Id = Id, Name = Name, Index = Index, DeviceId = DeviceId
+            Id = Id,
+            Name = Name,
+            Index = Index,
+            DeviceId = DeviceId
         });
+    }
 
+    public void SetStatus(ValveStatus status)
+    {
+        if (Status == status)
+        {
+            return;
+        }
+
+        Status = status;
         UpdatedAt = DateTimeOffset.UtcNow;
     }
 
-    public void Closed()
+    public void Opened(ActivityOrigin origin)
     {
-        if (Status == ValveStatus.Closed)
+        Raise(new ValveOpenedEvent
         {
-            return;
-        }
+            Id = Id, Name = Name, Index = Index, DeviceId = DeviceId, Origin = origin
+        });
+    }
 
-        Status = ValveStatus.Closed;
-
+    public void Closed(ActivityOrigin origin)
+    {
         Raise(new ValveClosedEvent
         {
-            Id = Id, Name = Name, Index = Index, DeviceId = DeviceId
+            Id = Id, Name = Name, Index = Index, DeviceId = DeviceId, Origin = origin
         });
-
-        UpdatedAt = DateTimeOffset.UtcNow;
     }
 
     public void Close()

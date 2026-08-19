@@ -1,12 +1,15 @@
 ﻿using Irrigation.Application.Common;
+using Irrigation.Application.Common.Sagas;
 using Irrigation.Application.Health;
 using Irrigation.Application.Valves;
+using Irrigation.Application.Valves.Sagas;
 using Irrigation.Infrastructure.Devices;
 using Irrigation.Infrastructure.Health;
 using Irrigation.Infrastructure.Mqtt;
 using Irrigation.Infrastructure.Mqtt.Abstraction;
 using Irrigation.Infrastructure.Outbox;
 using Irrigation.Infrastructure.Persistence;
+using Irrigation.Infrastructure.Sagas;
 using Irrigation.Infrastructure.Valves;
 using Microsoft.EntityFrameworkCore;
 using MQTTnet;
@@ -72,9 +75,12 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddSaga(this IServiceCollection services)
+    private static IServiceCollection AddSagas(this IServiceCollection services)
     {
-        // todo:
+        services.AddScoped<ISagaStore, SagaStore>();
+        services.AddScoped<ISagaProcessor, SagaProcessor>();
+
+        services.AddHostedService<SagaWorker>();
 
         return services;
     }
@@ -83,7 +89,9 @@ public static class DependencyInjection
     {
         services.AddScoped<IMessageHandler, ValveMessageHandler>();
 
-        services.AddScoped<IValveService, ValveService>();
+        services.AddScoped<ISagaHandler<ValveOperationState>, ValveOperationSaga>();
+
+        services.AddScoped<IValveController, ValveController>();
 
         return services;
     }
