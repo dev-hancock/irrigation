@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using System.Text.RegularExpressions;
-using ErrorOr;
 using Irrigation.Application.Valves.Events.Inbound.UpdateValve;
 using Irrigation.Domain.Shared;
 using Irrigation.Domain.Valves;
@@ -16,27 +15,27 @@ public sealed partial class ValveMessageHandler(IMediator mediator) : IMessageHa
         return Pattern().IsMatch(message.Topic.Value);
     }
 
-    public async Task<ErrorOr<Success>> Handle(Message message, CancellationToken ct)
+    public async ValueTask Handle(Message message, CancellationToken ct)
     {
         var payload = JsonSerializer.Deserialize<ValveMessage>(message.Payload);
 
         if (payload is null)
         {
-            return Result.Success;
+            return;
         }
 
         if (!Enum.TryParse<ValveStatus>(payload.Status, true, out var status) || !Enum.IsDefined(status))
         {
-            return Error.Validation("Valve.InvalidStatus", $"Invalid valve status '{payload.Status}'.");
+            return;
         }
 
         await mediator.Publish(
             new UpdateValveEvent
             {
-                Index = payload.Id, Device = HardwareId.From(message.Device), Status = status
+                Index = payload.Index, 
+                Device = HardwareId.From(message.Device), 
+                Status = status
             }, ct);
-
-        return Result.Success;
     }
 
     [GeneratedRegex(@"/event/valve/\d+/state$")]

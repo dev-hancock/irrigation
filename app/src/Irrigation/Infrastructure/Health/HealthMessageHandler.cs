@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using System.Text.RegularExpressions;
-using ErrorOr;
 using Irrigation.Application.Health.Events;
 using Irrigation.Domain.Shared;
 using Irrigation.Infrastructure.Mqtt.Abstraction;
@@ -15,13 +14,13 @@ public sealed partial class HealthMessageHandler(IMediator mediator) : IMessageH
         return Pattern().IsMatch(message.Topic.Value);
     }
 
-    public async Task<ErrorOr<Success>> Handle(Message message, CancellationToken ct)
+    public async ValueTask Handle(Message message, CancellationToken ct)
     {
         var payload = JsonSerializer.Deserialize<HeartbeatMessage>(message.Payload);
 
         if (payload is null)
         {
-            return Result.Success;
+            return;
         }
 
         await mediator.Publish(
@@ -29,8 +28,6 @@ public sealed partial class HealthMessageHandler(IMediator mediator) : IMessageH
             {
                 Id = HardwareId.From(message.Device)
             }, ct);
-
-        return Result.Success;
     }
 
     [GeneratedRegex("/pong$")]

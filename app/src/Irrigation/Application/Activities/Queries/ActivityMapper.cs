@@ -3,7 +3,7 @@ using Irrigation.Domain.Activities;
 
 namespace Irrigation.Application.Activities.Queries;
 
-public class ActivityMapper(IEnumerable<IActivityFormatter> formatters)
+public class ActivityMapper(IEnumerable<IActivityFormatter> formatters) : IActivityMapper
 {
     public ActivityModel Map(Activity activity)
     {

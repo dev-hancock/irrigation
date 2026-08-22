@@ -1,7 +1,11 @@
-﻿namespace Irrigation.Infrastructure.Mqtt.Abstraction;
+﻿using Irrigation.Domain.Shared;
 
-public sealed record Message
+namespace Irrigation.Infrastructure.Mqtt.Abstraction;
+
+public sealed record Message : IIdentified
 {
+    public Guid EventId { get; init; }
+
     public string Device => Topic.Device;
 
     public required Topic Topic { get; init; }

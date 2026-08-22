@@ -12,7 +12,7 @@ public class Activity : AggregateRoot
 
     public ActivityType Type { get; private set; }
 
-    public ActivityOrigin Origin { get; private set; }
+    public ActionOrigin Origin { get; private set; }
 
     public ActivityCategory Category { get; private set; }
 
@@ -23,7 +23,7 @@ public class Activity : AggregateRoot
     public static Activity Create(
         ActivityType type,
         ActivityCategory category,
-        ActivityOrigin origin,
+        ActionOrigin origin,
         string data)
     {
         var activity = new Activity

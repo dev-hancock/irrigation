@@ -5,7 +5,7 @@ using Mediator;
 
 namespace Irrigation.Application.Valves.Events.Domain;
 
-public class ValveOpenedHandler(IEventBus events) : INotificationHandler<ValveOpenedEvent>
+public class ValveOpenedHandler(IEventBus events) : IDomainEventHandler<ValveOpenedEvent>
 {
     public async ValueTask Handle(ValveOpenedEvent notification, CancellationToken cancellationToken)
     {

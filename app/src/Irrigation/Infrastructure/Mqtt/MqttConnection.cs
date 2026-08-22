@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using ErrorOr;
-using Irrigation.Application.Extensions;
 using Irrigation.Infrastructure.Mqtt.Abstraction;
 using Microsoft.Extensions.Options;
 using MQTTnet;
@@ -97,8 +96,6 @@ public class MqttConnection : IMqttConnection
 
         var consumer = scope.ServiceProvider.GetRequiredService<IMqttConsumer>();
 
-        var result = await consumer.Consume(message);
-
-        result.ThrowIfError();
+        await consumer.Consume(message);
     }
 }

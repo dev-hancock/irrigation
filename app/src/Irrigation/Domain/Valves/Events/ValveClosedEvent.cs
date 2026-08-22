@@ -1,10 +1,11 @@
 ﻿using Irrigation.Domain.Activities;
+using Irrigation.Domain.Common;
 using Irrigation.Domain.Shared;
 using Mediator;
 
 namespace Irrigation.Domain.Valves.Events;
 
-public sealed record ValveClosedEvent : INotification
+public sealed record ValveClosedEvent : DomainEvent
 {
     public required ValveId Id { get; init; }
 
@@ -14,5 +15,5 @@ public sealed record ValveClosedEvent : INotification
 
     public required DeviceId DeviceId { get; init; }
 
-    public required ActivityOrigin Origin { get; init; }
+    public required ActionOrigin Origin { get; init; }
 }

@@ -1,12 +1,15 @@
 ﻿using ErrorOr;
 using Irrigation.Application.Common;
+using Irrigation.Application.Common.Sagas;
+using Irrigation.Application.Valves.Sagas;
+using Irrigation.Domain.Activities;
 using Irrigation.Domain.Valves;
 using Irrigation.Domain.Valves.Specifications;
 using Mediator;
 
 namespace Irrigation.Application.Valves.Commands.CloseValve;
 
-public sealed class CloseValveHandler(IRepository<Valve> repo, ILogger<CloseValveHandler> logger)
+public sealed class CloseValveHandler(IRepository<Valve> repo, ISagaStore sagas)
     : IRequestHandler<CloseValveCommand, ErrorOr<Success>>
 {
     public async ValueTask<ErrorOr<Success>> Handle(CloseValveCommand request, CancellationToken cancellationToken)
@@ -20,9 +23,21 @@ public sealed class CloseValveHandler(IRepository<Valve> repo, ILogger<CloseValv
             return Error.NotFound("Valve.NotFound", $"Valve with id '{request.Id.Value}' not found.");
         }
 
-        valve.Close();
+        var result =  valve.Close();
 
-        logger.LogInformation($"Valve '{valve.Index}' was closed.");
+        if (!result)
+        {
+            return Result.Success;
+        }
+
+        await sagas.Start(
+            new ValveOperationState
+            {
+                ValveId = valve.Id,
+                Target = ValveStatus.Closed,
+                Origin = ActionOrigin.Manual
+            },
+            cancellationToken);
 
         await repo.SaveChangesAsync(cancellationToken);
 

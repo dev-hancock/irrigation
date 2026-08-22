@@ -1,7 +1,9 @@
 ﻿using System.Text.Json;
+using Irrigation.Domain.Activities;
 using Irrigation.Domain.Common;
 using Irrigation.Domain.Devices;
 using Irrigation.Domain.Valves;
+using Irrigation.Infrastructure.Idempotency;
 using Irrigation.Infrastructure.Outbox;
 using Irrigation.Infrastructure.Sagas;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +12,15 @@ namespace Irrigation.Infrastructure.Persistence;
 
 public class IrrigationDbContext(DbContextOptions<IrrigationDbContext> options) : DbContext(options)
 {
+    public DbSet<Activity> Activities { get; set; }
+
     public DbSet<Valve> Valves { get; set; }
 
     public DbSet<Device> Devices { get; set; }
 
     public DbSet<OutboxMessage> Outbox { get; set; }
+
+    public DbSet<IdempotentMessage> Idempotency { get; set; }
 
     public DbSet<SagaInstance> Sagas { get; set; }
 

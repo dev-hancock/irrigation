@@ -1,16 +1,21 @@
-﻿using Irrigation.Application.Common;
+﻿using Irrigation.Application.Activities;
+using Irrigation.Application.Activities.Abstractions;
+using Irrigation.Application.Activities.Queries;
+using Irrigation.Application.Common;
 using Irrigation.Application.Common.Sagas;
 using Irrigation.Application.Health;
 using Irrigation.Application.Valves;
 using Irrigation.Application.Valves.Sagas;
 using Irrigation.Infrastructure.Devices;
 using Irrigation.Infrastructure.Health;
+using Irrigation.Infrastructure.Idempotency;
 using Irrigation.Infrastructure.Mqtt;
 using Irrigation.Infrastructure.Mqtt.Abstraction;
 using Irrigation.Infrastructure.Outbox;
 using Irrigation.Infrastructure.Persistence;
 using Irrigation.Infrastructure.Sagas;
 using Irrigation.Infrastructure.Valves;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 using MQTTnet;
 
@@ -21,7 +26,9 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddDb();
+        services.AddIdempotency();
         services.AddOutbox();
+        services.AddSagas();
         services.AddMqtt();
 
         services.AddValves();
@@ -29,9 +36,28 @@ public static class DependencyInjection
         services.AddActivities();
         services.AddHealth();
 
-        services.AddMediator(opt => opt.ServiceLifetime = ServiceLifetime.Scoped);
+        services.AddMediator(opt =>
+        {
+            opt.ServiceLifetime = ServiceLifetime.Scoped;
+        });
+
+        services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentNotificationHandler<>));
+        services.Decorate(typeof(IMessageHandler), typeof(IdempotentMessageHandler));
 
         services.AddSingleton<IEventBus, EventBus>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddIdempotency(this IServiceCollection services)
+    {
+        services.AddScoped<IIdempotencyHandler, IdempotencyHandler>();
+        services.AddScoped<IIdempotencyCleanup, IdempotencyCleanup>();
+        services.AddScoped<IIdempotencyStore, IdempotencyStore>();
+        
+        services.AddOptions<IdempotencyOptions>().BindConfiguration(IdempotencyOptions.Section);
+
+        services.AddHostedService<IdempotencyWorker>();
 
         return services;
     }
@@ -69,6 +95,9 @@ public static class DependencyInjection
     private static IServiceCollection AddOutbox(this IServiceCollection services)
     {
         services.AddScoped<IOutboxProcessor, OutboxProcessor>();
+        services.AddScoped<IOutboxCleanup, OutboxCleanup>();
+
+        services.AddOptions<OutboxOptions>().BindConfiguration(OutboxOptions.Section);
 
         services.AddHostedService<OutboxWorker>();
 
@@ -79,6 +108,9 @@ public static class DependencyInjection
     {
         services.AddScoped<ISagaStore, SagaStore>();
         services.AddScoped<ISagaProcessor, SagaProcessor>();
+        services.AddScoped<ISagaCleanup, SagaCleanup>();
+
+        services.AddOptions<SagaOptions>().BindConfiguration(SagaOptions.Section);
 
         services.AddHostedService<SagaWorker>();
 
@@ -105,7 +137,9 @@ public static class DependencyInjection
 
     private static IServiceCollection AddActivities(this IServiceCollection services)
     {
-        // todo:
+        services.AddScoped<IActivityMapper, ActivityMapper>();
+
+        services.AddScoped<IActivityWriter, ActivityWriter>();
 
         return services;
     }

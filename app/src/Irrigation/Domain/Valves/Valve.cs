@@ -48,11 +48,11 @@ public class Valve : AggregateRoot
         );
     }
 
-    public void Open()
+    public bool Open()
     {
         if (Status is ValveStatus.Open or ValveStatus.Opening)
         {
-            return;
+            return false;
         }
 
         Status = ValveStatus.Opening;
@@ -63,6 +63,8 @@ public class Valve : AggregateRoot
         });
 
         UpdatedAt = DateTimeOffset.UtcNow;
+
+        return true;
     }
 
     public void Rename(string name)
@@ -109,7 +111,7 @@ public class Valve : AggregateRoot
         UpdatedAt = DateTimeOffset.UtcNow;
     }
 
-    public void Opened(ActivityOrigin origin)
+    public void Opened(ActionOrigin origin)
     {
         Raise(new ValveOpenedEvent
         {
@@ -121,7 +123,7 @@ public class Valve : AggregateRoot
         });
     }
 
-    public void Closed(ActivityOrigin origin)
+    public void Closed(ActionOrigin origin)
     {
         Raise(new ValveClosedEvent
         {
@@ -133,11 +135,11 @@ public class Valve : AggregateRoot
         });
     }
 
-    public void Close()
+    public bool Close()
     {
         if (Status is ValveStatus.Closed or ValveStatus.Closing)
         {
-            return;
+            return false;
         }
 
         Status = ValveStatus.Closing;
@@ -148,5 +150,7 @@ public class Valve : AggregateRoot
         });
 
         UpdatedAt = DateTimeOffset.UtcNow;
+
+        return true;
     }
 }

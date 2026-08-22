@@ -10,5 +10,5 @@ public class ValveOperationState
 
     public required ValveId ValveId { get; init; }
 
-    public required ActivityOrigin Origin { get; init; }
+    public required ActionOrigin Origin { get; init; }
 }

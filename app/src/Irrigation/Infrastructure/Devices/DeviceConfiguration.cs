@@ -3,7 +3,7 @@ using Irrigation.Domain.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Irrigation.Infrastructure.Persistence.Configuration;
+namespace Irrigation.Infrastructure.Devices;
 
 public sealed class DeviceConfiguration : IEntityTypeConfiguration<Device>
 {

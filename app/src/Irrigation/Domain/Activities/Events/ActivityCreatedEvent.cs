@@ -1,7 +1,7 @@
-﻿using Mediator;
+﻿using Irrigation.Domain.Common;
 
 namespace Irrigation.Domain.Activities.Events;
 
-public class ActivityCreatedEvent : INotification
+public record ActivityCreatedEvent : DomainEvent
 {
 }

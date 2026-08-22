@@ -1,12 +1,10 @@
-﻿using ErrorOr;
-using Irrigation.Application.Extensions;
-using Irrigation.Infrastructure.Mqtt.Abstraction;
+﻿using Irrigation.Infrastructure.Mqtt.Abstraction;
 
 namespace Irrigation.Infrastructure.Mqtt;
 
-public class MqttConsumer(IEnumerable<IMessageHandler> handlers) : IMqttConsumer
+public sealed partial class MqttConsumer(IEnumerable<IMessageHandler> handlers, ILogger<MqttConsumer> _) : IMqttConsumer
 {
-    public async Task<ErrorOr<Success>> Consume(Message message, CancellationToken ct = default)
+    public async ValueTask Consume(Message message, CancellationToken ct = default)
     {
         foreach (var handler in handlers)
         {
@@ -17,13 +15,24 @@ public class MqttConsumer(IEnumerable<IMessageHandler> handlers) : IMqttConsumer
                 continue;
             }
 
-            var result = await handler.Handle(message, ct);
+            try
+            {
+                await handler.Handle(message, ct);
+            }
+            catch (Exception ex)
+            {
+                LogHandlerFailed(ex, message.Topic.Value, handler.GetType().Name);
+            }
 
-            result.ThrowIfError();
-
-            return result;
+            return;
         }
 
-        return Error.NotFound("Mqtt.Handler.NotFound", $"No handler registered for MQTT topic: {message.Topic}");
+        LogHandlerNotFound(message.Topic.Value);
     }
+
+    [LoggerMessage(Level = LogLevel.Error, Message = "Failed to handle MQTT message '{Topic}' with '{Handler}'.")]
+    partial void LogHandlerFailed(Exception exception,  string topic, string handler);
+
+    [LoggerMessage(Level = LogLevel.Warning, Message = "No handler registered for MQTT topic '{Topic}'.")]
+    partial void LogHandlerNotFound(string topic);
 }

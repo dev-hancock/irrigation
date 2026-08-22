@@ -1,4 +1,5 @@
 ﻿using Irrigation.Application.Activities.Abstractions;
+using Irrigation.Application.Common;
 using Irrigation.Application.Extensions;
 using Irrigation.Application.Valves.Activities;
 using Irrigation.Domain.Valves.Events;
@@ -6,7 +7,7 @@ using Mediator;
 
 namespace Irrigation.Application.Valves.Events.Domain;
 
-public class ValveClosedActivityHandler(IActivityWriter activity) : INotificationHandler<ValveClosedEvent>
+public class ValveClosedActivityHandler(IActivityWriter activity) : IDomainEventHandler<ValveClosedEvent>
 {
     public async ValueTask Handle(ValveClosedEvent notification, CancellationToken cancellationToken)
     {

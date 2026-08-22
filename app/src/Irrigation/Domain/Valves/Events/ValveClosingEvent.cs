@@ -1,9 +1,10 @@
-﻿using Irrigation.Domain.Shared;
+﻿using Irrigation.Domain.Common;
+using Irrigation.Domain.Shared;
 using Mediator;
 
 namespace Irrigation.Domain.Valves.Events;
 
-public sealed record ValveClosingEvent : INotification
+public sealed record ValveClosingEvent : DomainEvent
 {
     public required ValveId Id { get; init; }
 

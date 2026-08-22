@@ -4,7 +4,7 @@ using Irrigation.Domain.Valves;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Irrigation.Infrastructure.Persistence.Configuration;
+namespace Irrigation.Infrastructure.Valves;
 
 public sealed class ValveConfiguration : IEntityTypeConfiguration<Valve>
 {
@@ -38,16 +38,19 @@ public sealed class ValveConfiguration : IEntityTypeConfiguration<Valve>
             .HasMaxLength(50)
             .IsRequired();
 
+        builder.Property(x => x.CreatedAt)
+            .IsRequired();
+
+        builder.Property(x => x.UpdatedAt)
+            .IsRequired();
+
         builder
             .HasOne<Device>()
             .WithMany()
             .HasForeignKey(x => x.DeviceId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasIndex(x => new
-            {
-                x.DeviceId, HardwareId = x.Index
-            })
+        builder.HasIndex(x => new { x.DeviceId, x.Index })
             .IsUnique();
 
         builder.Ignore(x => x.Events);

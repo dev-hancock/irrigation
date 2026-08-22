@@ -6,7 +6,7 @@ using Irrigation.Domain.Valves.Specifications;
 
 namespace Irrigation.Application.Valves.Sagas;
 
-public class ValveOperationSaga(IUnitOfWork uow, IValveController controller) : ISagaHandler<ValveOperationState>
+public class ValveOperationSaga(IUnitOfWork uow) : ISagaHandler<ValveOperationState>
 {
     private const int MaxAttempts = 3;
 
@@ -32,10 +32,6 @@ public class ValveOperationSaga(IUnitOfWork uow, IValveController controller) : 
                 case ValveStatus.Closed:
                     valve.Closed(state.Origin);
                     break;
-
-                default:
-                    return Saga.Fail(
-                        $"Unsupported target state '{state.Target}'.");
             }
 
             await uow.SaveChangesAsync(ct);
@@ -50,35 +46,6 @@ public class ValveOperationSaga(IUnitOfWork uow, IValveController controller) : 
             await uow.SaveChangesAsync(ct);
 
             return Saga.Fail($"Valve '{state.ValveId}' failed to reach '{state.Target}'.");
-        }
-
-        var device = await uow.Devices.FirstOrDefaultAsync(
-            new DeviceSpec(valve.DeviceId),
-            ct);
-
-        if (device is null)
-        {
-            return Saga.Fail($"Device '{valve.DeviceId}' not found.");
-        }
-
-        switch (state.Target)
-        {
-            case ValveStatus.Open:
-                await controller.Open(
-                    valve.Index,
-                    device.HardwareId,
-                    ct);
-                break;
-
-            case ValveStatus.Closed:
-                await controller.Close(
-                    valve.Index,
-                    device.HardwareId,
-                    ct);
-                break;
-
-            default:
-                return Saga.Fail($"Unsupported target state '{state.Target}'.");
         }
 
         return Saga.RetryAfter(TimeSpan.FromSeconds(5));

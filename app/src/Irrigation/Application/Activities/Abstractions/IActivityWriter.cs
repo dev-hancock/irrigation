@@ -9,7 +9,7 @@ public interface IActivityWriter
     Task<ErrorOr<Success>> Write(
         ActivityType type,
         ActivityCategory category,
-        ActivityOrigin origin,
+        ActionOrigin origin,
         object? data = null,
         CancellationToken ct = default);
 }

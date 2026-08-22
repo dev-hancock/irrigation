@@ -34,6 +34,7 @@
 		</PackageReference>
 		<PackageReference Include="Mediator.Abstractions" Version="3.0.*" />
 		<PackageReference Include="MQTTnet" Version="5.2.0.1603" />
+		<PackageReference Include="Scrutor" Version="7.0.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="10.0.1" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
@@ -44,6 +45,7 @@
 	  <Folder Include="Application\Devices\Commands\" />
 	  <Folder Include="Application\Devices\Events\Domain\" />
 	  <Folder Include="Application\Devices\Events\Outbound\" />
+	  <Folder Include="Domain\Devices\Events\" />
 	</ItemGroup>
 
 </Project>

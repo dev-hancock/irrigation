@@ -9,7 +9,7 @@ using Mediator;
 
 namespace Irrigation.Application.Valves.Commands.OpenValve;
 
-public sealed class OpenValveHandler(IRepository<Valve> valves, ISagaStore sagas, ILogger<OpenValveHandler> logger)
+public sealed class OpenValveHandler(IRepository<Valve> valves, ISagaStore sagas)
     : IRequestHandler<OpenValveCommand, ErrorOr<Success>>
 {
     public async ValueTask<ErrorOr<Success>> Handle(OpenValveCommand request, CancellationToken cancellationToken)
@@ -23,16 +23,19 @@ public sealed class OpenValveHandler(IRepository<Valve> valves, ISagaStore sagas
             return Error.NotFound("Valve.NotFound", $"Valve with id '{request.Id.Value}' not found.");
         }
 
-        valve.Open();
+        var result = valve.Open();
+
+        if (!result)
+        {
+            return Result.Success;
+        }
 
         await sagas.Start(
             new ValveOperationState
             {
-                ValveId = valve.Id, Target = ValveStatus.Open, Origin = ActivityOrigin.Manual
+                ValveId = valve.Id, Target = ValveStatus.Open, Origin = ActionOrigin.Manual
             },
             cancellationToken);
-
-        logger.LogInformation($"Valve '{valve.Index}' was opened.");
 
         await valves.SaveChangesAsync(cancellationToken);
 

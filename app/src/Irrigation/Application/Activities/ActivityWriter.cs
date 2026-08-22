@@ -12,7 +12,7 @@ public class ActivityWriter(IRepository<Activity> repo) : IActivityWriter
     public async Task<ErrorOr<Success>> Write(
         ActivityType type,
         ActivityCategory category,
-        ActivityOrigin origin,
+        ActionOrigin origin,
         object? data = null,
         CancellationToken ct = default)
     {

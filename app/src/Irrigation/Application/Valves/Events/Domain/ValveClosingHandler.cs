@@ -9,7 +9,7 @@ using Mediator;
 namespace Irrigation.Application.Valves.Events.Domain;
 
 public class ValveClosingHandler(IRepository<Device> devices, IValveController controller, IEventBus events)
-    : INotificationHandler<ValveClosingEvent>
+    : IDomainEventHandler<ValveClosingEvent>
 {
     public async ValueTask Handle(ValveClosingEvent notification, CancellationToken cancellationToken)
     {
@@ -19,7 +19,7 @@ public class ValveClosingHandler(IRepository<Device> devices, IValveController c
 
         if (device is null)
         {
-            throw new InvalidOperationException($"Device '{notification.DeviceId.Value}' not found.");
+            return;
         }
 
         var result = await controller.Close(notification.Index, device.HardwareId, cancellationToken);

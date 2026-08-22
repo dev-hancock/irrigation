@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using System.Text.RegularExpressions;
-using ErrorOr;
 using Irrigation.Application.Devices.Events.Inbound;
 using Irrigation.Domain.Shared;
 using Irrigation.Infrastructure.Mqtt.Abstraction;
@@ -15,13 +14,13 @@ public sealed partial class DeviceMessageHandler(IMediator mediator) : IMessageH
         return Pattern().IsMatch(message.Topic.Value);
     }
 
-    public async Task<ErrorOr<Success>> Handle(Message message, CancellationToken ct)
+    public async ValueTask Handle(Message message, CancellationToken ct)
     {
         var payload = JsonSerializer.Deserialize<DeviceMessage>(message.Payload);
 
         if (payload is null)
         {
-            return Result.Success;
+            return;
         }
 
         await mediator.Publish(
@@ -29,8 +28,6 @@ public sealed partial class DeviceMessageHandler(IMediator mediator) : IMessageH
             {
                 Id = HardwareId.From(message.Device), Firmware = payload.Firmware, Model = payload.Model, Version = payload.Version
             }, ct);
-
-        return Result.Success;
     }
 
     [GeneratedRegex("/event/device$")]
