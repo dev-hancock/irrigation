@@ -2,7 +2,7 @@
 
 namespace Irrigation.Infrastructure.Mqtt;
 
-public class MqttService(IServiceScopeFactory factory, ILogger<MqttService> logger) : BackgroundService
+public sealed partial class MqttService(IServiceScopeFactory factory, ILogger<MqttService> _) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -19,9 +19,7 @@ public class MqttService(IServiceScopeFactory factory, ILogger<MqttService> logg
 
                 if (connect.IsError)
                 {
-                    logger.LogWarning(
-                        "Unable to connect to MQTT broker: {Errors}",
-                        connect.Errors);
+                    LogConnectionFailed(connect.Errors);
 
                     await Delay(stoppingToken);
                     continue;
@@ -33,9 +31,7 @@ public class MqttService(IServiceScopeFactory factory, ILogger<MqttService> logg
 
                 if (subscribe.IsError)
                 {
-                    logger.LogWarning(
-                        "Unable to subscribe to MQTT topics: {Errors}",
-                        subscribe.Errors);
+                    LogSubscriptionFailed(subscribe.Errors);
                 }
             }
 
@@ -47,4 +43,14 @@ public class MqttService(IServiceScopeFactory factory, ILogger<MqttService> logg
     {
         return Task.Delay(TimeSpan.FromSeconds(5), ct);
     }
+
+    [LoggerMessage(
+        Level = LogLevel.Warning,
+        Message = "Unable to connect to MQTT broker: {Errors}")]
+    partial void LogConnectionFailed(IEnumerable<ErrorOr.Error> errors);
+
+    [LoggerMessage(
+        Level = LogLevel.Warning,
+        Message = "Unable to subscribe to MQTT topics: {Errors}")]
+    partial void LogSubscriptionFailed(IEnumerable<ErrorOr.Error> errors);
 }

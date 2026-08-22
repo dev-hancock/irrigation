@@ -6,7 +6,7 @@ using Mediator;
 
 namespace Irrigation.Application.Valves.Events.Inbound.UpdateValve;
 
-public class UpdateValveHandler(IUnitOfWork uow, ILogger<UpdateValveHandler> logger) : INotificationHandler<UpdateValveEvent>
+public class UpdateValveHandler(IUnitOfWork uow) : INotificationHandler<UpdateValveEvent>
 {
     public async ValueTask Handle(UpdateValveEvent notification, CancellationToken cancellationToken)
     {
@@ -37,8 +37,6 @@ public class UpdateValveHandler(IUnitOfWork uow, ILogger<UpdateValveHandler> log
         {
             valve.SetStatus(notification.Status);
         }
-
-        logger.LogInformation($"Valve '{device.HardwareId.Value}:{valve.Index}' is {valve.Status}");
 
         await uow.SaveChangesAsync(cancellationToken);
     }

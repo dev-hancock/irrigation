@@ -10,7 +10,10 @@ public interface ISagaProcessor
     Task Process(CancellationToken ct = default);
 }
 
-public sealed class SagaProcessor(IrrigationDbContext db, IServiceProvider services) : ISagaProcessor
+public sealed partial class SagaProcessor(
+    IrrigationDbContext db,
+    IServiceProvider services,
+    ILogger<SagaProcessor> _) : ISagaProcessor
 {
     public async Task Process(CancellationToken ct = default)
     {
@@ -88,6 +91,8 @@ public sealed class SagaProcessor(IrrigationDbContext db, IServiceProvider servi
         }
         catch (Exception ex)
         {
+            LogProcessingFailed(ex, saga.Id, saga.Type, saga.Attempts + 1);
+
             saga.Attempts++;
             saga.Error = ex.Message;
             saga.NextAttemptAt = DateTimeOffset.UtcNow.AddSeconds(5);
@@ -103,4 +108,13 @@ public sealed class SagaProcessor(IrrigationDbContext db, IServiceProvider servi
     {
         return (ISagaHandler)services.GetRequiredService(GetHandlerType(type));
     }
+
+    [LoggerMessage(
+        Level = LogLevel.Error,
+        Message = "Failed to process saga '{SagaId}' of type '{SagaType}' on attempt '{Attempt}'.")]
+    partial void LogProcessingFailed(
+        Exception exception,
+        Guid sagaId,
+        string sagaType,
+        int attempt);
 }

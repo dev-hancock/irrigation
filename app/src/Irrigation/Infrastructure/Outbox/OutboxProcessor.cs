@@ -10,7 +10,10 @@ public interface IOutboxProcessor
     Task Process(CancellationToken ct = default);
 }
 
-public class OutboxProcessor(IrrigationDbContext db, IMediator mediator) : IOutboxProcessor
+public sealed partial class OutboxProcessor(
+    IrrigationDbContext db,
+    IMediator mediator,
+    ILogger<OutboxProcessor> _) : IOutboxProcessor
 {
     public async Task Process(CancellationToken ct = default)
     {
@@ -45,6 +48,8 @@ public class OutboxProcessor(IrrigationDbContext db, IMediator mediator) : IOutb
             }
             catch (Exception ex)
             {
+                LogProcessingFailed(ex, message.Id, message.Type, message.Attempts + 1);
+
                 message.Attempts++;
                 message.Error = ex.Message;
             }
@@ -52,4 +57,13 @@ public class OutboxProcessor(IrrigationDbContext db, IMediator mediator) : IOutb
 
         await db.SaveChangesAsync(ct);
     }
+
+    [LoggerMessage(
+        Level = LogLevel.Error,
+        Message = "Failed to process outbox message '{MessageId}' of type '{MessageType}' on attempt '{Attempt}'.")]
+    partial void LogProcessingFailed(
+        Exception exception,
+        Guid messageId,
+        string messageType,
+        int attempt);
 }
